@@ -39,7 +39,17 @@ class GameViewController: UIViewController {
         }
     }
 
+    @IBOutlet weak var craneButNot: UIButton!
     override var prefersStatusBarHidden: Bool {
         return true
     }
+    
+    
+    @IBAction func tapAction(_ sender: UITapGestureRecognizer) {
+        var tapLocation = sender.location(in: view)
+        craneButNot.center.x = tapLocation.x
+        
+    }
+    
+    
 }

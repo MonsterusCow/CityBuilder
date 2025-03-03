@@ -12,10 +12,14 @@ class GameScene: SKScene {
     
     var drop: SKSpriteNode!
     let cam = SKCameraNode()
+    var crane : SKSpriteNode!
+    
     
     override func didMove(to view: SKView) {
         drop = self.childNode(withName: "drop") as? SKSpriteNode
         self.camera = cam
+        AppData.game = self
+        crane = (self.childNode(withName: "crane") as! SKSpriteNode)
     }
     
     

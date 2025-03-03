@@ -10,11 +10,19 @@ import GameplayKit
 
 class GameScene: SKScene {
     
+    var drop: SKSpriteNode!
+    let cam = SKCameraNode()
+    
     override func didMove(to view: SKView) {
+        drop = self.childNode(withName: "drop") as? SKSpriteNode
+        self.camera = cam
     }
     
     
     func touchDown(atPoint pos : CGPoint) {
+        if drop.contains(pos){
+            print("drop now")
+        }
     }
     
     func touchMoved(toPoint pos : CGPoint) {
@@ -37,5 +45,6 @@ class GameScene: SKScene {
     
     
     override func update(_ currentTime: TimeInterval) {
+        cam.pos = crane.pos
     }
 }

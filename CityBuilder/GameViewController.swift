@@ -9,6 +9,13 @@ import UIKit
 import SpriteKit
 import GameplayKit
 
+class AppData{
+    
+    static var game : GameScene!
+    
+    
+}
+
 class GameViewController: UIViewController {
 
     override func viewDidLoad() {
@@ -50,6 +57,7 @@ class GameViewController: UIViewController {
         let tapLocation = sender.location(in: view)
         
         craneButNot.center.x = tapLocation.x
+        AppData.game.crane.position.x = tapLocation.x
     }
     
     

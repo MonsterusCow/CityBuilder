@@ -10,7 +10,12 @@ import GameplayKit
 
 class GameScene: SKScene {
     
+    var crane : SKSpriteNode!
+    
+    
     override func didMove(to view: SKView) {
+        AppData.game = self
+        crane = (self.childNode(withName: "crane") as! SKSpriteNode)
     }
     
     

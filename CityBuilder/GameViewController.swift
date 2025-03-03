@@ -45,11 +45,26 @@ class GameViewController: UIViewController {
     }
     
     
+    
     @IBAction func tapAction(_ sender: UITapGestureRecognizer) {
-        var tapLocation = sender.location(in: view)
-        craneButNot.center.x = tapLocation.x
+        let tapLocation = sender.location(in: view)
         
+        craneButNot.center.x = tapLocation.x
     }
     
+    
+    
+    @IBAction func panAction(_ sender: UIPanGestureRecognizer) {
+        let tapLocation = sender.location(in: view)
+        
+        craneButNot.center.x = tapLocation.x
+    }
+    
+    
+    @IBAction func lettapLocationsenderlocationinviewlongPressAction(_ sender: UILongPressGestureRecognizer) {
+        let tapLocation = sender.location(in: view)
+        
+        craneButNot.center.x = tapLocation.x
+    }
     
 }

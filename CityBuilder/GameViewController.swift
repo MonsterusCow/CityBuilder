@@ -39,36 +39,40 @@ class GameViewController: UIViewController {
             return .all
         }
     }
-
-    @IBOutlet weak var craneButNot: UIButton!
-    override var prefersStatusBarHidden: Bool {
-        return true
-    }
     
     
     
     @IBAction func tapAction(_ sender: UITapGestureRecognizer) {
-        let tapLocation = sender.location(in: view)
-        
-        
-    }
-    
-    
-    
-    @IBAction func panAction(_ sender: UIPanGestureRecognizer) {
         let touchLocation = sender.location(in: view)
-            if let scene = game.view?.scene {
+        if let scene = game.view?.scene {
             let convertedLocation = scene.convertPoint(fromView: touchLocation)
-
-            game.crane.position.x = convertedLocation.x
+            if game.drop.contains(convertedLocation){
+                game.dropBlock()
+            }
         }
     }
     
+    @IBAction func panAction(_ sender: UIPanGestureRecognizer) {
+        let touchLocation = sender.location(in: view)
+        if let scene = game.view?.scene {
+            let convertedLocation = scene.convertPoint(fromView: touchLocation)
+            game.crane.position.x = convertedLocation.x
+            game.string.position.x = convertedLocation.x
+            game.drop.position.x = convertedLocation.x
+            if game.holding{
+                game.buildings[game.buildings.count-1].position.x = convertedLocation.x
+            }
+        }
+    }
+    
+    @IBAction func makeTheBlock(_ sender: Any) {
+        if !game.holding {
+            game.createBlock(position: CGPoint(x: game.crane.position.x, y: game.crane.position.y-100), txture: SKTexture(image: UIImage(named: "street")!), sizex: 200, sizey: 100)
+        }
+    }
     
     @IBAction func lettapLocationsenderlocationinviewlongPressAction(_ sender: UILongPressGestureRecognizer) {
         let tapLocation = sender.location(in: view)
-        
-        craneButNot.center.x = tapLocation.x
     }
     
 }

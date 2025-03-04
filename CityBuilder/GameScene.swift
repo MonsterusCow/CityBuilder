@@ -12,14 +12,18 @@ class GameScene: SKScene {
     
     var drop: SKSpriteNode!
     let cam = SKCameraNode()
+    var background: SKSpriteNode!
     var crane : SKSpriteNode!
     
     
     override func didMove(to view: SKView) {
         drop = self.childNode(withName: "drop") as? SKSpriteNode
-        self.camera = cam
-        AppData.game = self
+        background = (self.childNode(withName: "background") as! SKSpriteNode)
         crane = (self.childNode(withName: "crane") as! SKSpriteNode)
+        self.camera = cam
+        cam.position = background.position
+        cam.setScale(max(background.size.width / self.size.width, background.size.height / self.size.height))
+
     }
     
     
@@ -49,6 +53,5 @@ class GameScene: SKScene {
     
     
     override func update(_ currentTime: TimeInterval) {
-        cam.pos = crane.pos
     }
 }

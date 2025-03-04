@@ -9,30 +9,24 @@ import UIKit
 import SpriteKit
 import GameplayKit
 
-class AppData{
-    
-    static var game : GameScene!
-    
-    
-}
 
 class GameViewController: UIViewController {
 
+    var game: GameScene!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         if let view = self.view as! SKView? {
             // Load the SKScene from 'GameScene.sks'
             if let scene = SKScene(fileNamed: "GameScene") {
-                // Set the scale mode to scale to fit the window
-                scene.scaleMode = .aspectFill
                 
-                // Present the scene
+                scene.scaleMode = .aspectFill
+                game = scene as? GameScene
                 view.presentScene(scene)
             }
             
             view.ignoresSiblingOrder = true
-            
             view.showsFPS = true
             view.showsNodeCount = true
         }
@@ -56,16 +50,18 @@ class GameViewController: UIViewController {
     @IBAction func tapAction(_ sender: UITapGestureRecognizer) {
         let tapLocation = sender.location(in: view)
         
-        craneButNot.center.x = tapLocation.x
-        AppData.game.crane.position.x = tapLocation.x
+        
     }
     
     
     
     @IBAction func panAction(_ sender: UIPanGestureRecognizer) {
-        let tapLocation = sender.location(in: view)
-        
-        craneButNot.center.x = tapLocation.x
+        let touchLocation = sender.location(in: view)
+            if let scene = game.view?.scene {
+            let convertedLocation = scene.convertPoint(fromView: touchLocation)
+
+            game.crane.position.x = convertedLocation.x
+        }
     }
     
     

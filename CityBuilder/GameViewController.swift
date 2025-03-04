@@ -13,9 +13,31 @@ import GameplayKit
 class GameViewController: UIViewController {
 
     var game: GameScene!
+    var blockArray: [Block] = [Block(name: "brick", imageID: "brick"),Block(name: "brickAlt", imageID: "brickIdeas"),Block(name: "glue", imageID: "glue")]
+    var randomBlockArray: [Block] = []
+    
+    
+    @IBOutlet weak var button0: UIButton!
+    
+    @IBOutlet weak var button1: UIButton!
+    
+    @IBOutlet weak var button2: UIButton!
+    
+    @IBOutlet weak var button3: UIButton!
+    
+    @IBOutlet weak var button4: UIButton!
+    
+    var buttonArray: [UIButton] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
+       
+        buttonArray = [self.button0,self.button1,self.button2,self.button3,self.button4]
+        
+        for _ in 0..<5{
+            randomBlockArray.append(blockArray[Int.random(in: 0..<3)])
+        }
+        updateBlocks()
         
         if let view = self.view as! SKView? {
             // Load the SKScene from 'GameScene.sks'
@@ -48,9 +70,12 @@ class GameViewController: UIViewController {
     
     
     @IBAction func tapAction(_ sender: UITapGestureRecognizer) {
-        let tapLocation = sender.location(in: view)
-        
-        
+        let touchLocation = sender.location(in: view)
+            if let scene = game.view?.scene {
+            let convertedLocation = scene.convertPoint(fromView: touchLocation)
+
+            game.crane.position.x = convertedLocation.x
+        }
     }
     
     
@@ -66,9 +91,32 @@ class GameViewController: UIViewController {
     
     
     @IBAction func lettapLocationsenderlocationinviewlongPressAction(_ sender: UILongPressGestureRecognizer) {
-        let tapLocation = sender.location(in: view)
-        
-        craneButNot.center.x = tapLocation.x
+        let touchLocation = sender.location(in: view)
+            if let scene = game.view?.scene {
+            let convertedLocation = scene.convertPoint(fromView: touchLocation)
+
+            game.crane.position.x = convertedLocation.x
+        }
     }
+    
+    func blockClicked(buttonClicked: Int){
+        
+        
+        
+    }
+    
+    func updateBlocks(){
+        for i in 0..<randomBlockArray.count{
+            let image = UIImage(named: randomBlockArray[i].imageID)
+            image?.draw(in: CGRect(origin: .zero, size: CGSize(width: 10, height: 10)))
+            buttonArray[i].setTitle("", for: .normal)
+            buttonArray[i].setImage(image, for: .normal)
+            
+            
+        }
+        
+    }
+    
+    
     
 }

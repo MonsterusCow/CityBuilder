@@ -93,7 +93,10 @@ class GameViewController: UIViewController {
         
         @IBAction func makeTheBlock(_ sender: Any) {
             if !game.holding {
-                game.createBlock(position: CGPoint(x: game.crane.position.x, y: game.crane.position.y-100), txture: SKTexture(image: UIImage(named: "street")!), sizex: 200, sizey: 100)
+                game.createBlock(position: CGPoint(x: game.crane.position.x, y: game.crane.position.y-100), txture: SKTexture(image: UIImage(named: "street")!), sizex: 200, sizey: 100, category: 1, contact: 1)
+
+                
+                
             }
         }
         

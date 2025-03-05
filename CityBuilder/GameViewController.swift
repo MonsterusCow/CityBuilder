@@ -11,7 +11,7 @@ import GameplayKit
 
 
 class GameViewController: UIViewController {
-
+    
     var game: GameScene!
     var blockArray: [Block] = [Block(name: "brick", imageID: "brick"),Block(name: "brickAlt", imageID: "brickIdeas"),Block(name: "glue", imageID: "glue")]
     var randomBlockArray: [Block] = []
@@ -31,7 +31,7 @@ class GameViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-       
+        
         buttonArray = [self.button0,self.button1,self.button2,self.button3,self.button4]
         
         for _ in 0..<5{
@@ -53,7 +53,7 @@ class GameViewController: UIViewController {
             view.showsNodeCount = true
         }
     }
-
+    
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
         if UIDevice.current.userInterfaceIdiom == .phone {
             return .allButUpsideDown
@@ -68,62 +68,63 @@ class GameViewController: UIViewController {
         let touchLocation = sender.location(in: view)
         if let scene = game.view?.scene {
             if let scene = game.view?.scene {
-            let convertedLocation = scene.convertPoint(fromView: touchLocation)
-            if game.drop.contains(convertedLocation){
-                game.dropBlock()
-            }
-
-            game.crane.position.x = convertedLocation.x
-        }
-    }
-    
-    @IBAction func panAction(_ sender: UIPanGestureRecognizer) {
-        let touchLocation = sender.location(in: view)
-        if let scene = game.view?.scene {
-            let convertedLocation = scene.convertPoint(fromView: touchLocation)
-            game.crane.position.x = convertedLocation.x
-            game.string.position.x = convertedLocation.x
-            game.drop.position.x = convertedLocation.x
-            if game.holding{
-                game.buildings[game.buildings.count-1].position.x = convertedLocation.x
+                let convertedLocation = scene.convertPoint(fromView: touchLocation)
+                if game.drop.contains(convertedLocation){
+                    game.dropBlock()
+                }
+                
+                game.crane.position.x = convertedLocation.x
             }
         }
     }
-    
-    @IBAction func makeTheBlock(_ sender: Any) {
-        if !game.holding {
-            game.createBlock(position: CGPoint(x: game.crane.position.x, y: game.crane.position.y-100), txture: SKTexture(image: UIImage(named: "street")!), sizex: 200, sizey: 100)
-        }
-    }
-    
-    @IBAction func lettapLocationsenderlocationinviewlongPressAction(_ sender: UILongPressGestureRecognizer) {
-        let tapLocation = sender.location(in: view)
-        let touchLocation = sender.location(in: view)
+        
+        @IBAction func panAction(_ sender: UIPanGestureRecognizer) {
+            let touchLocation = sender.location(in: view)
             if let scene = game.view?.scene {
-            let convertedLocation = scene.convertPoint(fromView: touchLocation)
-
-            game.crane.position.x = convertedLocation.x
-        }
-    }
-    
-    func blockClicked(buttonClicked: Int){
-        
-        
-        
-    }
-    
-    func updateBlocks(){
-        for i in 0..<randomBlockArray.count{
-            let image = UIImage(named: randomBlockArray[i].imageID)
-            image?.draw(in: CGRect(origin: .zero, size: CGSize(width: 10, height: 10)))
-            buttonArray[i].setTitle("", for: .normal)
-            buttonArray[i].setImage(image, for: .normal)
-            
-            
+                let convertedLocation = scene.convertPoint(fromView: touchLocation)
+                game.crane.position.x = convertedLocation.x
+                game.string.position.x = convertedLocation.x
+                game.drop.position.x = convertedLocation.x
+                if game.holding{
+                    game.buildings[game.buildings.count-1].position.x = convertedLocation.x
+                }
+            }
         }
         
+        @IBAction func makeTheBlock(_ sender: Any) {
+            if !game.holding {
+                game.createBlock(position: CGPoint(x: game.crane.position.x, y: game.crane.position.y-100), txture: SKTexture(image: UIImage(named: "street")!), sizex: 200, sizey: 100)
+            }
+        }
+        
+        @IBAction func lettapLocationsenderlocationinviewlongPressAction(_ sender: UILongPressGestureRecognizer) {
+            let tapLocation = sender.location(in: view)
+            let touchLocation = sender.location(in: view)
+            if let scene = game.view?.scene {
+                let convertedLocation = scene.convertPoint(fromView: touchLocation)
+                
+                game.crane.position.x = convertedLocation.x
+            }
+        }
+        
+        func blockClicked(buttonClicked: Int){
+            
+            
+            
+        }
+        
+        func updateBlocks(){
+//            for i in 0..<randomBlockArray.count{
+//                let image = UIImage(named: randomBlockArray[i].imageID)
+//                image?.draw(in: CGRect(origin: .zero, size: CGSize(width: 10, height: 10)))
+//                buttonArray[i].setTitle("", for: .normal)
+//                buttonArray[i].setImage(image, for: .normal)
+//                
+//                
+//            }
+            
+        }
+        
+        
+        
     }
-    
-    
-    
-}

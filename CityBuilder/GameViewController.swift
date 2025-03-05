@@ -27,6 +27,8 @@ class GameViewController: UIViewController {
     
     @IBOutlet weak var button4: UIButton!
     
+    var lastRandomNumber = -1
+    
     var buttonArray: [UIButton] = []
     
     override func viewDidLoad() {
@@ -35,7 +37,14 @@ class GameViewController: UIViewController {
         buttonArray = [self.button0,self.button1,self.button2,self.button3,self.button4]
         
         for _ in 0..<5{
-            randomBlockArray.append(blockArray[Int.random(in: 0..<3)])
+            var random = Int.random(in: 0..<3)
+            
+            while random == lastRandomNumber{
+               random = Int.random(in: 0..<3)
+            }
+            lastRandomNumber = random
+            
+            randomBlockArray.append(blockArray[random])
         }
         updateBlocks()
         
@@ -73,7 +82,7 @@ class GameViewController: UIViewController {
                     game.dropBlock()
                 }
                 
-                game.crane.position.x = convertedLocation.x
+              
             }
         }
     }
@@ -97,15 +106,7 @@ class GameViewController: UIViewController {
             }
         }
         
-        @IBAction func lettapLocationsenderlocationinviewlongPressAction(_ sender: UILongPressGestureRecognizer) {
-            let tapLocation = sender.location(in: view)
-            let touchLocation = sender.location(in: view)
-            if let scene = game.view?.scene {
-                let convertedLocation = scene.convertPoint(fromView: touchLocation)
-                
-                game.crane.position.x = convertedLocation.x
-            }
-        }
+     
         
         func blockClicked(buttonClicked: Int){
             
@@ -114,14 +115,17 @@ class GameViewController: UIViewController {
         }
         
         func updateBlocks(){
-//            for i in 0..<randomBlockArray.count{
-//                let image = UIImage(named: randomBlockArray[i].imageID)
-//                image?.draw(in: CGRect(origin: .zero, size: CGSize(width: 10, height: 10)))
-//                buttonArray[i].setTitle("", for: .normal)
-//                buttonArray[i].setImage(image, for: .normal)
-//                
-//                
-//            }
+            for i in 0..<randomBlockArray.count{
+                let image = UIImage(named: randomBlockArray[i].imageID)
+                UIGraphicsBeginImageContextWithOptions(CGSize(width: 110, height: 55), false, 1.0)
+                image?.draw(in: CGRect(origin: buttonArray[i].accessibilityActivationPoint, size: CGSize(width: 110, height: 55)))
+                let newImage = UIGraphicsGetImageFromCurrentImageContext()
+                UIGraphicsEndImageContext()
+                buttonArray[i].setTitle("", for: .normal)
+                buttonArray[i].setImage(newImage, for: .normal)
+                
+                
+            }
             
         }
         

@@ -10,6 +10,8 @@ import SpriteKit
 import GameplayKit
 
 
+
+
 class GameViewController: UIViewController {
     
     var game: GameScene!
@@ -109,14 +111,6 @@ class GameViewController: UIViewController {
             }
         }
         
-        @IBAction func lettapLocationsenderlocationinviewlongPressAction(_ sender: UILongPressGestureRecognizer) {
-            let tapLocation = sender.location(in: view)
-            let touchLocation = sender.location(in: view)
-            if let scene = game.view?.scene {
-                let convertedLocation = scene.convertPoint(fromView: touchLocation)
-                
-            }
-        }
         
      
         

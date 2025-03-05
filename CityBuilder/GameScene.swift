@@ -10,12 +10,28 @@ import GameplayKit
 
 class Buildings {
     
-    
+    var texture: SKTexture
+    var category: Int
+    var contact: Int
+    var height: Double
+    var width: Double
+
+    init(texture: SKTexture, category: Int, contact: Int, height: Double, width: Double) {
+        self.texture = texture
+        self.category = category
+        self.contact = contact
+        self.height = height
+        self.width = width
+    }
     
 }
 
 class GameScene: SKScene {
     
+    var allBuildings: [Buildings] = []
+    var physicalBuildings: [SKSpriteNode] = []
+
+
     var drop: SKSpriteNode!
     let cam = SKCameraNode()
     var background: SKSpriteNode!
@@ -35,7 +51,8 @@ class GameScene: SKScene {
         cam.position.y -= 80
         cam.setScale(max(background.size.width / self.size.width, background.size.height / self.size.height))
 
-        createBlock(position: CGPoint(x: crane.position.x, y: crane.position.y-100), txture: SKTexture(image: UIImage(named: "street")!), sizex: 200, sizey: 100)
+        createBlock(position: CGPoint(x: crane.position.x, y: crane.position.y-100), txture: SKTexture(image: UIImage(named: "street")!), sizex: 200, sizey: 100, category: 1, contact: 1)
+        
     }
     
     
@@ -60,7 +77,10 @@ class GameScene: SKScene {
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
     }
     
-    func createBlock(position: CGPoint, txture: SKTexture, sizex: Int, sizey: Int){
+    func createBlock(position: CGPoint, txture: SKTexture, sizex: Int, sizey: Int, category: Int, contact: Int){
+        let building = Buildings(texture: txture, category: category, contact: contact, height: Double(sizey), width: Double(sizex))
+        allBuildings.append(building)
+        
         let spriteSize = CGSize(width: sizex, height: sizey)
         let sprite = SKSpriteNode(texture: txture, size: spriteSize)
         sprite.position = position
@@ -74,7 +94,7 @@ class GameScene: SKScene {
         sprite.physicsBody?.categoryBitMask = 1
         sprite.physicsBody?.contactTestBitMask = 2
         sprite.zPosition = 3
-        buildings.append(sprite)
+        physicalBuildings.append(sprite)
         self.addChild(sprite)
         
         holding = true
@@ -83,7 +103,7 @@ class GameScene: SKScene {
     
     func dropBlock(){
         holding = false
-        buildings[buildings.count-1].physicsBody?.affectedByGravity = true
+        physicalBuildings[physicalBuildings.count-1].physicsBody?.affectedByGravity = true
         crane.texture = SKTexture(image: UIImage(named: "claw")!)
     }
     

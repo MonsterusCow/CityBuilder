@@ -121,8 +121,10 @@ class GameViewController: UIViewController {
                 image?.draw(in: CGRect(origin: buttonArray[i].accessibilityActivationPoint, size: CGSize(width: 110, height: 55)))
                 let newImage = UIGraphicsGetImageFromCurrentImageContext()
                 UIGraphicsEndImageContext()
+                image?.draw(in: CGRect(origin: .zero, size: CGSize(width: 10, height: 10)))
                 buttonArray[i].setTitle("", for: .normal)
                 buttonArray[i].setImage(newImage, for: .normal)
+                buttonArray[i].setImage(image, for: .normal)
                 
                 
             }

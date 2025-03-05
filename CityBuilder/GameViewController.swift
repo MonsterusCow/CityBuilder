@@ -114,14 +114,14 @@ class GameViewController: UIViewController {
         }
         
         func updateBlocks(){
-//            for i in 0..<randomBlockArray.count{
-//                let image = UIImage(named: randomBlockArray[i].imageID)
-//                image?.draw(in: CGRect(origin: .zero, size: CGSize(width: 10, height: 10)))
-//                buttonArray[i].setTitle("", for: .normal)
-//                buttonArray[i].setImage(image, for: .normal)
-//                
-//                
-//            }
+            for i in 0..<randomBlockArray.count{
+                let image = UIImage(named: randomBlockArray[i].imageID)
+                image?.draw(in: CGRect(origin: .zero, size: CGSize(width: 10, height: 10)))
+                buttonArray[i].setTitle("", for: .normal)
+                buttonArray[i].setImage(image, for: .normal)
+                
+                
+            }
             
         }
         

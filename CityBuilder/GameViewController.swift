@@ -95,14 +95,15 @@ class GameViewController: UIViewController {
                 game.string.position.x = convertedLocation.x
                 game.drop.position.x = convertedLocation.x
                 if game.holding{
-                    game.buildings[game.buildings.count-1].position.x = convertedLocation.x
+                    game.physicalBuildings[game.physicalBuildings.count-1].position.x = convertedLocation.x
                 }
             }
         }
         
         @IBAction func makeTheBlock(_ sender: Any) {
             if !game.holding {
-                game.createBlock(position: CGPoint(x: game.crane.position.x, y: game.crane.position.y-100), txture: SKTexture(image: UIImage(named: "street")!), sizex: 200, sizey: 100)
+                game.createBlock(position: CGPoint(x: game.crane.position.x, y: game.crane.position.y-100), txture: SKTexture(image: UIImage(named: "street")!), sizex: 200, sizey: 100, category: 1, contact: 1)
+                
             }
         }
         
@@ -121,10 +122,10 @@ class GameViewController: UIViewController {
                 image?.draw(in: CGRect(origin: buttonArray[i].accessibilityActivationPoint, size: CGSize(width: 110, height: 55)))
                 let newImage = UIGraphicsGetImageFromCurrentImageContext()
                 UIGraphicsEndImageContext()
-                image?.draw(in: CGRect(origin: .zero, size: CGSize(width: 10, height: 10)))
+               
                 buttonArray[i].setTitle("", for: .normal)
                 buttonArray[i].setImage(newImage, for: .normal)
-                buttonArray[i].setImage(image, for: .normal)
+             
                 
                 
             }

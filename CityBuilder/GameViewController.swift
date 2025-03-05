@@ -102,15 +102,34 @@ class GameViewController: UIViewController {
             }
         }
         
-        @IBAction func makeTheBlock(_ sender: Any) {
-            if !game.holding {
-                game.createBlock(position: CGPoint(x: game.crane.position.x, y: game.crane.position.y-100), txture: SKTexture(image: UIImage(named: "street")!), sizex: 200, sizey: 100, category: 1, contact: 1)
+    @IBAction func Buttons(_ sender: Any) {
+        var texture: SKTexture
+        if button0.isTouchInside{
+            texture = SKTexture(image: button0.currentImage!)
+        } else if button1.isTouchInside{
+            texture = SKTexture(image: button1.currentImage!)
+        } else if button2.isTouchInside{
+            texture = SKTexture(image: button2.currentImage!)
+        } else if button3.isTouchInside{
+            texture = SKTexture(image: button3.currentImage!)
+        } else{
+            texture = SKTexture(image: button4.currentImage!)
+        }
+        if !game.holding{
+            game.createBlock(position: CGPoint(x: game.crane.position.x, y: game.crane.position.y-100), txture: texture, sizex: 200, sizey: 100, category: 1, contact: 1)
 
-                
+        }
+        
+    }
+    
+        @IBAction func lettapLocationsenderlocationinviewlongPressAction(_ sender: UILongPressGestureRecognizer) {
+            let tapLocation = sender.location(in: view)
+            let touchLocation = sender.location(in: view)
+            if let scene = game.view?.scene {
+                let convertedLocation = scene.convertPoint(fromView: touchLocation)
                 
             }
         }
-        
         
      
         

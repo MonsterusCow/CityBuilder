@@ -26,7 +26,7 @@ class Buildings {
     
 }
 
-class GameScene: SKScene {
+class GameScene: SKScene, SKPhysicsContactDelegate {
     
     var allBuildings: [Buildings] = []
     var physicalBuildings: [SKSpriteNode] = []
@@ -42,6 +42,7 @@ class GameScene: SKScene {
     
     
     override func didMove(to view: SKView) {
+        physicsWorld.contactDelegate = self
         drop = self.childNode(withName: "drop") as? SKSpriteNode
         string = self.childNode(withName: "string") as? SKSpriteNode
         background = (self.childNode(withName: "background") as! SKSpriteNode)
@@ -53,6 +54,14 @@ class GameScene: SKScene {
 
         createBlock(position: CGPoint(x: crane.position.x, y: crane.position.y-100), txture: SKTexture(image: UIImage(named: "street")!), sizex: 200, sizey: 100, category: 1, contact: 1)
         
+    }
+    
+    func didBegin(_ contact: SKPhysicsContact) {
+        let bodyA = contact.bodyA.node!
+        let bodyB = contact.bodyB.node!
+        if bodyA.position.x > (bodyB.position.x - (bodyB.frame.height/2)) && bodyA.position.x < (bodyB.position.x + (bodyB.frame.height/2)){
+            print("good align")
+        }
     }
     
     
@@ -91,8 +100,8 @@ class GameScene: SKScene {
         sprite.physicsBody?.restitution = 0
         sprite.physicsBody?.linearDamping = 1
         sprite.physicsBody?.angularDamping = 0.2
-        sprite.physicsBody?.categoryBitMask = 1
-        sprite.physicsBody?.contactTestBitMask = 2
+        sprite.physicsBody?.categoryBitMask = UInt32(category)
+        sprite.physicsBody?.contactTestBitMask = UInt32(contact)
         sprite.zPosition = 3
         physicalBuildings.append(sprite)
         self.addChild(sprite)

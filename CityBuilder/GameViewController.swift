@@ -104,33 +104,55 @@ class GameViewController: UIViewController {
         
     @IBAction func Buttons(_ sender: Any) {
         var block : Block
+        
+        while randomBlockArray.count < 5{
+            
+            var random = Int.random(in: 0..<3)
+            while random == lastRandomNumber{
+               random = Int.random(in: 0..<3)
+            }
+            lastRandomNumber = random
+            
+            randomBlockArray.append(blockArray[random])
+        }
+        
         if button0.isTouchInside{
             block = randomBlockArray[0]
+            randomBlockArray.remove(at: 0)
         } else if button1.isTouchInside{
             block = randomBlockArray[1]
+            randomBlockArray.remove(at: 1)
         } else if button2.isTouchInside{
             block = randomBlockArray[2]
+            randomBlockArray.remove(at: 2)
         } else if button3.isTouchInside{
             block = randomBlockArray[3]
+            randomBlockArray.remove(at: 3)
         } else{
             block = randomBlockArray[4]
+            randomBlockArray.remove(at: 4)
         }
-        if !game.holding{
+      
+                if !game.holding{
             game.createBlock(position: CGPoint(x: game.crane.position.x, y: game.crane.position.y-100), block: block, sizex: 200, sizey: 100, category: 1, contact: 1)
 
+                    var random = Int.random(in: 0..<3)
+                    while random == lastRandomNumber{
+                       random = Int.random(in: 0..<3)
+                    }
+                    lastRandomNumber = random
+                    
+                    randomBlockArray.append(blockArray[random])
+                    
+                    updateBlocks()
+                    
         }
+        
         
     }
-    
         
      
-        
-        func blockClicked(buttonClicked: Int){
-            
-            
-            
-        }
-        
+   
         func updateBlocks(){
             for i in 0..<randomBlockArray.count{
                 let image = UIImage(named: randomBlockArray[i].imageID)
@@ -147,7 +169,17 @@ class GameViewController: UIViewController {
             }
             
         }
-        
+    
+    
+    @IBAction func leftAction(_ sender: UIButton) {
+        game.cam.position.x -= 1
+    }
+    
+    
+    @IBAction func rightActon(_ sender: UIButton) {
+        game.cam.position.x += 1
+    }
+    
         
         
     }

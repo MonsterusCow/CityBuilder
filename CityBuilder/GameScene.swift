@@ -10,14 +10,14 @@ import GameplayKit
 
 class Buildings {
     
-    var texture: SKTexture
+    var block: Block
     var category: Int
     var contact: Int
     var height: Double
     var width: Double
 
-    init(texture: SKTexture, category: Int, contact: Int, height: Double, width: Double) {
-        self.texture = texture
+    init(block: Block, category: Int, contact: Int, height: Double, width: Double) {
+        self.block = block
         self.category = category
         self.contact = contact
         self.height = height
@@ -52,7 +52,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         cam.position.y -= 80
         cam.setScale(max(background.size.width / self.size.width, background.size.height / self.size.height))
 
-        createBlock(position: CGPoint(x: crane.position.x, y: crane.position.y-100), txture: SKTexture(image: UIImage(named: "street")!), sizex: 200, sizey: 100, category: 1, contact: 1)
+        createBlock(position: CGPoint(x: crane.position.x, y: crane.position.y-100), block: Block(name: "road", imageID: "street"), sizex: 200, sizey: 100, category: 1, contact: 1)
         
     }
     
@@ -86,14 +86,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
     }
     
-    func createBlock(position: CGPoint, txture: SKTexture, sizex: Int, sizey: Int, category: Int, contact: Int){
-        let building = Buildings(texture: txture, category: category, contact: contact, height: Double(sizey), width: Double(sizex))
+    func createBlock(position: CGPoint, block: Block, sizex: Int, sizey: Int, category: Int, contact: Int){
+        let building = Buildings(block: block, category: category, contact: contact, height: Double(sizey), width: Double(sizex))
         allBuildings.append(building)
         
         let spriteSize = CGSize(width: sizex, height: sizey)
-        let sprite = SKSpriteNode(texture: txture, size: spriteSize)
+        let sprite = SKSpriteNode(texture: SKTexture(image: UIImage(named: block.imageID)!), size: spriteSize)
         sprite.position = position
-        sprite.physicsBody = SKPhysicsBody(texture: txture, size: spriteSize)
+        sprite.physicsBody = SKPhysicsBody(texture: SKTexture(image: UIImage(named: block.imageID)!), size: spriteSize)
         sprite.physicsBody?.isDynamic = true
         sprite.physicsBody?.affectedByGravity = false
         sprite.physicsBody?.allowsRotation = true

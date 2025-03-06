@@ -116,7 +116,7 @@ class GameViewController: UIViewController {
             block = randomBlockArray[4]
         }
         if !game.holding{
-            game.createBlock(position: CGPoint(x: game.crane.position.x, y: game.crane.position.y-100), txture: SKTexture(image: UIImage(named: block.imageID)!), sizex: 200, sizey: 100, category: 1, contact: 1)
+            game.createBlock(position: CGPoint(x: game.crane.position.x, y: game.crane.position.y-100), block: block, sizex: 200, sizey: 100, category: 1, contact: 1)
 
         }
         

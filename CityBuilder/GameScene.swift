@@ -52,7 +52,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         cam.position.y -= 80
         cam.setScale(max(background.size.width / self.size.width, background.size.height / self.size.height))
 
-        createBlock(position: CGPoint(x: crane.position.x, y: crane.position.y-100), block: Block(name: "road", imageID: "street"), sizex: 200, sizey: 100, category: 1, contact: 1)
+//        createBlock(position: CGPoint(x: crane.position.x, y: crane.position.y-100), block: Block(name: "road", imageID: "street"), sizex: 200, sizey: 100, category: 1, contact: 1)
         
     }
     

@@ -99,6 +99,25 @@ class GameViewController: UIViewController {
                 if game.holding{
                     game.physicalBuildings[game.physicalBuildings.count-1].position.x = convertedLocation.x
                 }
+                for (i, building) in game.physicalBuildings.enumerated() {
+                    if game.holding && i == game.physicalBuildings.count - 1 {
+                        continue
+                    }
+                    
+                    if game.crane.position.x >= building.position.x-building.frame.width/2 && game.crane.position.x <= building.position.x+building.frame.width/2 {
+                        if game.holding{
+                            if game.crane.position.y - building.position.y < (building.frame.height+game.physicalBuildings[0].frame.height+100) {
+                                game.crane.position.y = (building.frame.height+game.physicalBuildings[0].frame.height+100)
+                            }
+                        } else {
+                            if game.crane.position.y - building.position.y < (building.frame.height+100) {
+                                game.crane.position.y = building.position.y + 150
+                            }
+                        }
+                        
+                    }
+                }
+                
             }
         }
         

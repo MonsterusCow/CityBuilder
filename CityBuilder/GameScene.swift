@@ -11,15 +11,11 @@ import GameplayKit
 class Buildings {
     
     var block: Block
-    var category: Int
-    var contact: Int
     var height: Double
     var width: Double
 
-    init(block: Block, category: Int, contact: Int, height: Double, width: Double) {
+    init(block: Block, height: Double, width: Double) {
         self.block = block
-        self.category = category
-        self.contact = contact
         self.height = height
         self.width = width
     }
@@ -39,7 +35,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var string: SKSpriteNode!
     var buildings: [SKSpriteNode] = []
     var holding = false
-    
+    var initialCraneY = CGFloat(0)
     
     override func didMove(to view: SKView) {
         physicsWorld.contactDelegate = self
@@ -51,8 +47,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         cam.position = background.position
         cam.position.y -= 80
         cam.setScale(max(background.size.width / self.size.width, background.size.height / self.size.height))
+        initialCraneY = crane.position.y
 
-//        createBlock(position: CGPoint(x: crane.position.x, y: crane.position.y-100), block: Block(name: "road", imageID: "street"), sizex: 200, sizey: 100, category: 1, contact: 1)
+//        createBlock(position: CGPoint(x: crane.position.x, y: crane.position.y-100), block: Block(name: "road", imageID: "street"), sizex: 200, sizey: 100)
         
     }
     
@@ -86,8 +83,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
     }
     
-    func createBlock(position: CGPoint, block: Block, sizex: Int, sizey: Int, category: Int, contact: Int){
-        let building = Buildings(block: block, category: category, contact: contact, height: Double(sizey), width: Double(sizex))
+    func createBlock(position: CGPoint, block: Block, sizex: Int, sizey: Int){
+        let building = Buildings(block: block, height: Double(sizey), width: Double(sizex))
         allBuildings.append(building)
         
         let spriteSize = CGSize(width: sizex, height: sizey)
@@ -96,12 +93,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         sprite.physicsBody = SKPhysicsBody(texture: SKTexture(image: UIImage(named: block.imageID)!), size: spriteSize)
         sprite.physicsBody?.isDynamic = true
         sprite.physicsBody?.affectedByGravity = false
-        sprite.physicsBody?.allowsRotation = true
+        sprite.physicsBody?.allowsRotation = false
         sprite.physicsBody?.restitution = 0
         sprite.physicsBody?.linearDamping = 1
         sprite.physicsBody?.angularDamping = 0.2
-        sprite.physicsBody?.categoryBitMask = UInt32(category)
-        sprite.physicsBody?.contactTestBitMask = UInt32(contact)
+        sprite.physicsBody?.categoryBitMask = 0
+        sprite.physicsBody?.collisionBitMask = 0
+        sprite.physicsBody?.contactTestBitMask = 0
         sprite.zPosition = 3
         physicalBuildings.append(sprite)
         self.addChild(sprite)
@@ -113,10 +111,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     func dropBlock(){
         holding = false
         physicalBuildings[physicalBuildings.count-1].physicsBody?.affectedByGravity = true
+        physicalBuildings[physicalBuildings.count-1].physicsBody?.categoryBitMask = 1
+        physicalBuildings[physicalBuildings.count-1].physicsBody?.contactTestBitMask = 1
+        physicalBuildings[physicalBuildings.count-1].physicsBody?.collisionBitMask = 1
+
+
         crane.texture = SKTexture(image: UIImage(named: "claw")!)
     }
     
     
     override func update(_ currentTime: TimeInterval) {
+        print(crane.position.y)
     }
 }

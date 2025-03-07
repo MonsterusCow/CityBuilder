@@ -19,6 +19,9 @@ class GameViewController: UIViewController {
     var randomBlockArray: [Block] = []
     
     
+    
+    @IBOutlet weak var scoreOutlet: UILabel!
+    
     @IBOutlet weak var button0: UIButton!
     
     @IBOutlet weak var button1: UIButton!

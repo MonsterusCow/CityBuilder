@@ -13,10 +13,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     var allBuildings: [Buildings] = []
     var physicalBuildings: [SKSpriteNode] = []
-
-
+    
+   
     var drop: SKSpriteNode!
-    let cam = SKCameraNode()
+    var cam = SKCameraNode()
     var background: SKSpriteNode!
     var crane : SKSpriteNode!
     var string: SKSpriteNode!
@@ -25,6 +25,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var initialCraneY = CGFloat(0)
     
     override func didMove(to view: SKView) {
+        
+       
+        
         physicsWorld.contactDelegate = self
         drop = self.childNode(withName: "drop") as? SKSpriteNode
         string = self.childNode(withName: "string") as? SKSpriteNode
@@ -108,6 +111,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     
     override func update(_ currentTime: TimeInterval) {
-//        print(crane.position.y)
+        //        print(crane.position.y)
+    
+//        if AppData.moveLeft{
+//            cam.position.x -= 1
+//        }
+//           
+//        if AppData.moveRight{
+//            cam.position.x += 1
+//        }
+        
+        
     }
 }

@@ -17,4 +17,19 @@ class Block{
         self.imageID = imageID
     }
     
+    
+}
+
+class Buildings {
+    
+    var block: Block
+    var height: Double
+    var width: Double
+
+    init(block: Block, height: Double, width: Double) {
+        self.block = block
+        self.height = height
+        self.width = width
+    }
+    
 }

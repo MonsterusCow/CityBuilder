@@ -15,7 +15,7 @@ import GameplayKit
 class GameViewController: UIViewController {
     
     var game: GameScene!
-    var blockArray: [Block] = [Block(name: "brick", imageID: "brick"),Block(name: "brickAlt", imageID: "brickIdeas"),Block(name: "glue", imageID: "glue")]
+    var blockArray: [Block] = [Block(name: "brick", imageID: "brick"),Block(name: "window", imageID: "window"),Block(name: "goop", imageID: "goop")]
     var randomBlockArray: [Block] = []
     
     @IBOutlet weak var button0: UIButton!
@@ -135,7 +135,13 @@ class GameViewController: UIViewController {
         }
       
                 if !game.holding{
-            game.createBlock(position: CGPoint(x: game.crane.position.x, y: game.crane.position.y-100), block: block, sizex: 200, sizey: 100)
+                    if block.imageID == "brick"{
+                        game.createBlock(position: CGPoint(x: game.crane.position.x, y: game.crane.position.y-100), block: block, sizex: 200, sizey: 100)
+                    } else if block.imageID == "goop"{
+                        game.createBlock(position: CGPoint(x: game.crane.position.x, y: game.crane.position.y-100), block: block, sizex: 150, sizey: 45)
+                    } else if block.imageID == "window"{
+                        game.createBlock(position: CGPoint(x: game.crane.position.x, y: game.crane.position.y-100), block: block, sizex: 200, sizey: 70)
+                    }
 
                     var random = Int.random(in: 0..<3)
                     while random == lastRandomNumber{
@@ -167,8 +173,8 @@ class GameViewController: UIViewController {
                 continue
             }
 
-            if game.crane.position.x >= building.position.x - (building.frame.width / 2) - 75 &&
-               game.crane.position.x <= building.position.x + (building.frame.width / 2) + 75 {
+            if game.crane.position.x >= building.position.x - (building.frame.width / 2) - 125 &&
+               game.crane.position.x <= building.position.x + (building.frame.width / 2) + 125 {
                 
                 let buildingTop = building.position.y + building.frame.height / 2
                 var verticalDistance: CGFloat = 0

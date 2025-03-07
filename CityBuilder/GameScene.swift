@@ -8,19 +8,6 @@
 import SpriteKit
 import GameplayKit
 
-class Buildings {
-    
-    var block: Block
-    var height: Double
-    var width: Double
-
-    init(block: Block, height: Double, width: Double) {
-        self.block = block
-        self.height = height
-        self.width = width
-    }
-    
-}
 
 class GameScene: SKScene, SKPhysicsContactDelegate {
     
@@ -121,6 +108,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     
     override func update(_ currentTime: TimeInterval) {
-        print(crane.position.y)
+//        print(crane.position.y)
     }
 }

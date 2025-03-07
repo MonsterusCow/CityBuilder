@@ -10,7 +10,14 @@ import SpriteKit
 import GameplayKit
 
 
-
+class AppData{
+   
+    static var view: GameViewController!
+    static var moveLeft = false
+    static var moveRight = false
+    
+    
+}
 
 class GameViewController: UIViewController {
     
@@ -18,7 +25,7 @@ class GameViewController: UIViewController {
     var blockArray: [Block] = [Block(name: "brick", imageID: "brick"),Block(name: "brickAlt", imageID: "brickIdeas"),Block(name: "glue", imageID: "glue")]
     var randomBlockArray: [Block] = []
     
-    
+    var score = 0
     
     @IBOutlet weak var scoreOutlet: UILabel!
     
@@ -32,12 +39,16 @@ class GameViewController: UIViewController {
     
     @IBOutlet weak var button4: UIButton!
     
+    
+    
     var lastRandomNumber = -1
     
     var buttonArray: [UIButton] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        AppData.view = self
         
         buttonArray = [self.button0,self.button1,self.button2,self.button3,self.button4]
         
@@ -246,15 +257,22 @@ class GameViewController: UIViewController {
         }
     
     
+    
+    
+    func addScore(){
+        score += 1
+        scoreOutlet.text = "Score: \(score)"
+    }
+    
+    
     @IBAction func leftAction(_ sender: UIButton) {
-        game.cam.position.x -= 1
+//        AppData.moveLeft = true
     }
     
     
-    @IBAction func rightActon(_ sender: UIButton) {
-        game.cam.position.x += 1
+    @IBAction func rightAction(_ sender: UIButton) {
+//        AppData.moveRight = true
     }
     
-        
         
     }

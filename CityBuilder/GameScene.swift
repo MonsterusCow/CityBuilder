@@ -61,7 +61,10 @@ func createBuilding(position: CGPoint, block: Block, sizex: Int, sizey: Int, sce
     let size = CGSize(width: sizex, height: sizey)
     let building = Building(block: block, position: position, size: size, scene: scene)
     allBuildings.append(building)
+    
+//    moveCraneToBuilding(building)
 }
+
 
 // Function to drop the last created building
 func dropBuilding() {

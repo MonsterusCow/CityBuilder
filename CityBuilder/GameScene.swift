@@ -8,10 +8,73 @@
 import SpriteKit
 import GameplayKit
 
+// Base Block class
+class Block {
+    var name: String
+    var imageID: String
+
+    init(name: String, imageID: String) {
+        self.name = name
+        self.imageID = imageID
+    }
+}
+
+// Building class that directly manages its sprite
+class Building {
+    var block: Block
+    var height: Double
+    var width: Double
+    var sprite: SKSpriteNode
+
+    init(block: Block, position: CGPoint, size: CGSize, scene: SKScene) {
+        self.block = block
+        self.height = Double(size.height)
+        self.width = Double(size.width)
+
+        // Create and configure the sprite
+        self.sprite = SKSpriteNode(texture: SKTexture(imageNamed: block.imageID), size: size)
+        self.sprite.position = position
+        self.sprite.zPosition = 3
+        
+        // Add physics body
+        self.sprite.physicsBody = SKPhysicsBody(texture: SKTexture(imageNamed: block.imageID), size: size)
+        self.sprite.physicsBody?.isDynamic = true
+        self.sprite.physicsBody?.affectedByGravity = false
+        self.sprite.physicsBody?.allowsRotation = false
+        self.sprite.physicsBody?.restitution = 0
+        self.sprite.physicsBody?.linearDamping = 1
+        self.sprite.physicsBody?.angularDamping = 0.2
+        self.sprite.physicsBody?.categoryBitMask = 0
+        self.sprite.physicsBody?.collisionBitMask = 0
+        self.sprite.physicsBody?.contactTestBitMask = 0
+
+        // Add to the scene
+        scene.addChild(self.sprite)
+    }
+}
+
+// Global lists to track buildings
+var allBuildings: [Building] = []
+
+// Function to create and place a building
+func createBuilding(position: CGPoint, block: Block, sizex: Int, sizey: Int, scene: SKScene) {
+    let size = CGSize(width: sizex, height: sizey)
+    let building = Building(block: block, position: position, size: size, scene: scene)
+    allBuildings.append(building)
+}
+
+// Function to drop the last created building
+func dropBuilding() {
+    guard let lastBuilding = allBuildings.last else { return }
+    
+    lastBuilding.sprite.physicsBody?.affectedByGravity = true
+    lastBuilding.sprite.physicsBody?.categoryBitMask = 1
+    lastBuilding.sprite.physicsBody?.contactTestBitMask = 1
+    lastBuilding.sprite.physicsBody?.collisionBitMask = 1
+}
 
 class GameScene: SKScene, SKPhysicsContactDelegate {
     
-    var allBuildings: [Buildings] = []
     var physicalBuildings: [SKSpriteNode] = []
     
    
@@ -39,7 +102,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         cam.setScale(max(background.size.width / self.size.width, background.size.height / self.size.height))
         initialCraneY = crane.position.y
 
-//        createBlock(position: CGPoint(x: crane.position.x, y: crane.position.y-100), block: Block(name: "road", imageID: "street"), sizex: 200, sizey: 100)
+//        createBuilding(position: CGPoint(x: crane.position.x, y: crane.position.y-100), block: Block(name: "road", imageID: "street"), sizex: 200, sizey: 200, scene: self)
         
     }
     
@@ -71,42 +134,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
-    }
-    
-    func createBlock(position: CGPoint, block: Block, sizex: Int, sizey: Int){
-        let building = Buildings(block: block, height: Double(sizey), width: Double(sizex))
-        allBuildings.append(building)
-        
-        let spriteSize = CGSize(width: sizex, height: sizey)
-        let sprite = SKSpriteNode(texture: SKTexture(image: UIImage(named: block.imageID)!), size: spriteSize)
-        sprite.position = position
-        sprite.physicsBody = SKPhysicsBody(texture: SKTexture(image: UIImage(named: block.imageID)!), size: spriteSize)
-        sprite.physicsBody?.isDynamic = true
-        sprite.physicsBody?.affectedByGravity = false
-        sprite.physicsBody?.allowsRotation = false
-        sprite.physicsBody?.restitution = 0
-        sprite.physicsBody?.linearDamping = 1
-        sprite.physicsBody?.angularDamping = 0.2
-        sprite.physicsBody?.categoryBitMask = 0
-        sprite.physicsBody?.collisionBitMask = 0
-        sprite.physicsBody?.contactTestBitMask = 0
-        sprite.zPosition = 3
-        physicalBuildings.append(sprite)
-        self.addChild(sprite)
-        
-        holding = true
-        crane.texture = SKTexture(image: UIImage(named: "open_claw")!)
-    }
-    
-    func dropBlock(){
-        holding = false
-        physicalBuildings[physicalBuildings.count-1].physicsBody?.affectedByGravity = true
-        physicalBuildings[physicalBuildings.count-1].physicsBody?.categoryBitMask = 1
-        physicalBuildings[physicalBuildings.count-1].physicsBody?.contactTestBitMask = 1
-        physicalBuildings[physicalBuildings.count-1].physicsBody?.collisionBitMask = 1
-
-
-        crane.texture = SKTexture(image: UIImage(named: "claw")!)
     }
     
     

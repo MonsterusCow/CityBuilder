@@ -91,182 +91,163 @@ class GameViewController: UIViewController {
     
     @IBAction func tapAction(_ sender: UITapGestureRecognizer) {
         let touchLocation = sender.location(in: view)
-        if let scene = game.view?.scene {
             if let scene = game.view?.scene {
                 let convertedLocation = scene.convertPoint(fromView: touchLocation)
-                if game.drop.contains(convertedLocation){
-                    game.dropBlock()
+                if game.drop.contains(convertedLocation) {
+                    dropBuilding()
+                    game.holding = false
                 }
-                
-              
             }
-        }
     }
         
         @IBAction func panAction(_ sender: UIPanGestureRecognizer) {
             let touchLocation = sender.location(in: view)
-            if let scene = game.view?.scene {
-                let convertedLocation = scene.convertPoint(fromView: touchLocation)
-                game.crane.position.x = convertedLocation.x
-                game.string.position.x = convertedLocation.x
-                game.drop.position.x = convertedLocation.x
-                if game.holding{
-                    game.physicalBuildings[game.physicalBuildings.count-1].position.x = convertedLocation.x
+                if let scene = game.view?.scene {
+                    let convertedLocation = scene.convertPoint(fromView: touchLocation)
+                    
+                    game.crane.position.x = convertedLocation.x
+                    game.string.position.x = convertedLocation.x
+                    game.drop.position.x = convertedLocation.x
+                    
+                    if game.holding, let lastBuilding = allBuildings.last {
+                        lastBuilding.sprite.position.x = convertedLocation.x
+                    }
+
+                    checkHeight()
                 }
-                checkHeight()
-            }
         }
         
     @IBAction func Buttons(_ sender: Any) {
-        var block : Block
-        
-        
-        while randomBlockArray.count < 5{
+        var block: Block
             
+            // Ensure at least 5 blocks in the queue
+            while randomBlockArray.count < 5 {
+                var random = Int.random(in: 0..<3)
+                while random == lastRandomNumber {
+                    random = Int.random(in: 0..<3)
+                }
+                lastRandomNumber = random
+                randomBlockArray.append(blockArray[random])
+            }
+            
+            // Select block based on button press
+            if button0.isTouchInside {
+                block = randomBlockArray[0]
+                randomBlockArray.remove(at: 0)
+            } else if button1.isTouchInside {
+                block = randomBlockArray[1]
+                randomBlockArray.remove(at: 1)
+            } else if button2.isTouchInside {
+                block = randomBlockArray[2]
+                randomBlockArray.remove(at: 2)
+            } else if button3.isTouchInside {
+                block = randomBlockArray[3]
+                randomBlockArray.remove(at: 3)
+            } else {
+                block = randomBlockArray[4]
+                randomBlockArray.remove(at: 4)
+            }
+
+            if !game.holding {
+                let size: CGSize
+                switch block.imageID {
+                    case "brick": size = CGSize(width: 200, height: 100)
+                    case "goop": size = CGSize(width: 150, height: 45)
+                    case "window": size = CGSize(width: 200, height: 70)
+                    default: size = CGSize(width: 100, height: 100)
+                }
+
+                createBuilding(position: CGPoint(x: game.crane.position.x, y: game.crane.position.y - 100),
+                               block: block, sizex: Int(size.width), sizey: Int(size.height),
+                               scene: game.view!.scene!)
+                
+                game.holding = true
+            }
+
             var random = Int.random(in: 0..<3)
-            while random == lastRandomNumber{
-               random = Int.random(in: 0..<3)
+            while random == lastRandomNumber {
+                random = Int.random(in: 0..<3)
             }
             lastRandomNumber = random
-            
             randomBlockArray.append(blockArray[random])
-        }
-        
-        if button0.isTouchInside{
-            block = randomBlockArray[0]
-            randomBlockArray.remove(at: 0)
-        } else if button1.isTouchInside{
-            block = randomBlockArray[1]
-            randomBlockArray.remove(at: 1)
-        } else if button2.isTouchInside{
-            block = randomBlockArray[2]
-            randomBlockArray.remove(at: 2)
-        } else if button3.isTouchInside{
-            block = randomBlockArray[3]
-            randomBlockArray.remove(at: 3)
-        } else{
-            block = randomBlockArray[4]
-            randomBlockArray.remove(at: 4)
-        }
-      
-                if !game.holding{
-                    if block.imageID == "brick"{
-                        game.createBlock(position: CGPoint(x: game.crane.position.x, y: game.crane.position.y-100), block: block, sizex: 200, sizey: 100)
-                    } else if block.imageID == "goop"{
-                        game.createBlock(position: CGPoint(x: game.crane.position.x, y: game.crane.position.y-100), block: block, sizex: 150, sizey: 45)
-                    } else if block.imageID == "window"{
-                        game.createBlock(position: CGPoint(x: game.crane.position.x, y: game.crane.position.y-100), block: block, sizex: 200, sizey: 70)
-                    }
 
-                    var random = Int.random(in: 0..<3)
-                    while random == lastRandomNumber{
-                       random = Int.random(in: 0..<3)
-                    }
-                    lastRandomNumber = random
-                    
-                    randomBlockArray.append(blockArray[random])
-                    
-                    updateBlocks()
-                    
-        }
-        
-        checkHeight()
-        
-        
+            updateBlocks()
+            checkHeight()
     }
         
     func checkHeight(){
-        let beginY: CGFloat = game.initialCraneY // Store the crane’s original height
+        let beginY: CGFloat = game.initialCraneY
+           var highestBuildingY: CGFloat? = nil
+           var shouldMoveUp = false
 
-        var highestBuildingY: CGFloat? = nil // Track the highest building below the crane
-        var shouldMoveUp = false // Track if the crane should move up
+           for (i, building) in allBuildings.enumerated() {
+               if game.holding && i == allBuildings.count - 1 { continue }
 
-        // Check for buildings directly beneath the crane
-        for (i, building) in game.physicalBuildings.enumerated() {
-            // Skip physicalBuildings[game.physicalBuildings.count-1] completely when holding
-            if game.holding && i == game.physicalBuildings.count-1 {
-                continue
-            }
+               if game.crane.position.x >= building.sprite.position.x - (building.sprite.size.width / 2) - 125 &&
+                  game.crane.position.x <= building.sprite.position.x + (building.sprite.size.width / 2) + 125 {
 
-            if game.crane.position.x >= building.position.x - (building.frame.width / 2) - 125 &&
-               game.crane.position.x <= building.position.x + (building.frame.width / 2) + 125 {
-                
-                let buildingTop = building.position.y + building.frame.height / 2
-                var verticalDistance: CGFloat = 0
+                   let buildingTop = building.sprite.position.y + building.sprite.size.height / 2
+                   var verticalDistance: CGFloat = 0
 
-                if !game.holding {
-                    verticalDistance = game.crane.position.y - buildingTop
-                    if verticalDistance < 100 {
-                        game.crane.position.y = buildingTop + 100
-                        shouldMoveUp = true
-                    }
-                } else {
-                    let heldBuilding = game.physicalBuildings[game.physicalBuildings.count-1]
-                    verticalDistance = (game.crane.position.y + heldBuilding.frame.height) - buildingTop
-                    
-                    if verticalDistance < (100 + heldBuilding.frame.height) {
-                        game.crane.position.y = buildingTop + heldBuilding.frame.height + 100
-                        shouldMoveUp = true
-                    }
-                }
+                   if !game.holding {
+                       verticalDistance = game.crane.position.y - buildingTop
+                       if verticalDistance < 100 {
+                           game.crane.position.y = buildingTop + 100
+                           shouldMoveUp = true
+                       }
+                   } else if let heldBuilding = allBuildings.last {
+                       verticalDistance = (game.crane.position.y + heldBuilding.sprite.size.height) - buildingTop
+                       if verticalDistance < (100 + heldBuilding.sprite.size.height) {
+                           game.crane.position.y = buildingTop + heldBuilding.sprite.size.height + 100
+                           shouldMoveUp = true
+                       }
+                   }
 
-                // Track the highest building below the crane
-                if highestBuildingY == nil || buildingTop > highestBuildingY! {
-                    highestBuildingY = buildingTop
-                }
-            }
-        }
+                   if highestBuildingY == nil || buildingTop > highestBuildingY! {
+                       highestBuildingY = buildingTop
+                   }
+               }
+           }
 
-        // If no buildings are too close, allow the crane to move down
-        if !shouldMoveUp {
-            if let highestY = highestBuildingY {
-                if game.holding {
-                    let heldBuilding = game.physicalBuildings[game.physicalBuildings.count-1]
-                    game.crane.position.y = max(beginY, highestY + heldBuilding.frame.height + 100)
-                } else {
-                    if beginY < highestY + 100{
-                        game.crane.position.y = highestY + 100
-                    } else {
-                        game.crane.position.y = beginY
-                    }
-                }
-            } else {
-                // No buildings below, return to original start height
-                game.crane.position.y = beginY
-            }
-        }
+           if !shouldMoveUp {
+               if let highestY = highestBuildingY {
+                   if game.holding, let heldBuilding = allBuildings.last {
+                       game.crane.position.y = max(beginY, highestY + heldBuilding.sprite.size.height + 100)
+                   } else {
+                       game.crane.position.y = max(beginY, highestY + 100)
+                   }
+               } else {
+                   game.crane.position.y = beginY
+               }
+           }
 
-        // Move the last building along with the crane if it is being held
-        if game.holding {
-            let lastBuilding = game.physicalBuildings[game.physicalBuildings.count-1]
-            lastBuilding.position.y = game.crane.position.y - 100
-        }
+           if game.holding, let lastBuilding = allBuildings.last {
+               lastBuilding.sprite.position.y = game.crane.position.y - 100
+           }
 
-        // Move string and drop along with the crane
-        game.string.position.y = game.crane.position.y + 280
-        game.drop.position.y = game.crane.position.y + 85
+           game.string.position.y = game.crane.position.y + 280
+           game.drop.position.y = game.crane.position.y + 85
 
     }
      
         func updateBlocks(){
-            for i in 0..<randomBlockArray.count{
-                let image = UIImage(named: randomBlockArray[i].imageID)
-                UIGraphicsBeginImageContextWithOptions(CGSize(width: 110, height: 55), false, 1.0)
-                image?.draw(in: CGRect(origin: buttonArray[i].accessibilityActivationPoint, size: CGSize(width: 110, height: 55)))
-                let newImage = UIGraphicsGetImageFromCurrentImageContext()
-                UIGraphicsEndImageContext()
-               
-                buttonArray[i].setTitle("", for: .normal)
-                buttonArray[i].setImage(newImage, for: .normal)
-            }
-            
+            for i in 0..<randomBlockArray.count {
+                    let image = UIImage(named: randomBlockArray[i].imageID)
+                    UIGraphicsBeginImageContextWithOptions(CGSize(width: 110, height: 55), false, 1.0)
+                    image?.draw(in: CGRect(origin: buttonArray[i].accessibilityActivationPoint, size: CGSize(width: 110, height: 55)))
+                    let newImage = UIGraphicsGetImageFromCurrentImageContext()
+                    UIGraphicsEndImageContext()
+                    
+                    buttonArray[i].setTitle("", for: .normal)
+                    buttonArray[i].setImage(newImage, for: .normal)
+                }
         }
     
     
     
     
     func addScore(){
-        score += 1
+        score += 5
         scoreOutlet.text = "Score: \(score)"
     }
     

@@ -80,15 +80,11 @@ class GameViewController: UIViewController {
     }
     
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
-        if UIDevice.current.userInterfaceIdiom == .phone {
-            return .landscapeRight
-        } else {
-            return .all
-        }
+        return .landscapeRight
     }
     
     
-    
+    //moves the crane left and right
     @IBAction func tapAction(_ sender: UITapGestureRecognizer) {
         let touchLocation = sender.location(in: view)
             if let scene = game.view?.scene {
@@ -119,8 +115,47 @@ class GameViewController: UIViewController {
         
     @IBAction func Buttons(_ sender: Any) {
         var block: Block
+        
+        // Ensure at least 5 blocks in the queue
+        while randomBlockArray.count < 5 {
+            var random = Int.random(in: 0..<3)
+            while random == lastRandomNumber {
+                random = Int.random(in: 0..<3)
+            }
+            lastRandomNumber = random
+            randomBlockArray.append(blockArray[random])
+        }
+        
+        // Select block based on button press
+        if !game.holding {
+            if button0.isTouchInside {
+                block = randomBlockArray[0]
+            } else if button1.isTouchInside {
+                block = randomBlockArray[1]
+            } else if button2.isTouchInside {
+                block = randomBlockArray[2]
+            } else if button3.isTouchInside {
+                block = randomBlockArray[3]
+            } else {
+                block = randomBlockArray[4]
+            }
+            randomBlockArray.removeAll()
             
-            // Ensure at least 5 blocks in the queue
+            let size: CGSize
+            switch block.imageID {
+            case "brick": size = CGSize(width: 200, height: 100)
+            case "goop": size = CGSize(width: 150, height: 45)
+            case "window": size = CGSize(width: 200, height: 70)
+            default: size = CGSize(width: 100, height: 100)
+            }
+            
+            createBuilding(position: CGPoint(x: game.crane.position.x, y: game.crane.position.y - 100),
+                           block: block, sizex: Int(size.width), sizey: Int(size.height),
+                           scene: game.view!.scene!)
+            
+            game.holding = true
+            
+            
             while randomBlockArray.count < 5 {
                 var random = Int.random(in: 0..<3)
                 while random == lastRandomNumber {
@@ -130,51 +165,12 @@ class GameViewController: UIViewController {
                 randomBlockArray.append(blockArray[random])
             }
             
-            // Select block based on button press
-            if button0.isTouchInside {
-                block = randomBlockArray[0]
-                randomBlockArray.remove(at: 0)
-            } else if button1.isTouchInside {
-                block = randomBlockArray[1]
-                randomBlockArray.remove(at: 1)
-            } else if button2.isTouchInside {
-                block = randomBlockArray[2]
-                randomBlockArray.remove(at: 2)
-            } else if button3.isTouchInside {
-                block = randomBlockArray[3]
-                randomBlockArray.remove(at: 3)
-            } else {
-                block = randomBlockArray[4]
-                randomBlockArray.remove(at: 4)
-            }
-
-            if !game.holding {
-                let size: CGSize
-                switch block.imageID {
-                    case "brick": size = CGSize(width: 200, height: 100)
-                    case "goop": size = CGSize(width: 150, height: 45)
-                    case "window": size = CGSize(width: 200, height: 70)
-                    default: size = CGSize(width: 100, height: 100)
-                }
-
-                createBuilding(position: CGPoint(x: game.crane.position.x, y: game.crane.position.y - 100),
-                               block: block, sizex: Int(size.width), sizey: Int(size.height),
-                               scene: game.view!.scene!)
-                
-                game.holding = true
-            }
-
-            var random = Int.random(in: 0..<3)
-            while random == lastRandomNumber {
-                random = Int.random(in: 0..<3)
-            }
-            lastRandomNumber = random
-            randomBlockArray.append(blockArray[random])
-
             updateBlocks()
             checkHeight()
+        }
     }
-        
+    
+    //makes the crane move up and down
     func checkHeight(){
         let beginY: CGFloat = game.initialCraneY
            var highestBuildingY: CGFloat? = nil
@@ -229,7 +225,7 @@ class GameViewController: UIViewController {
            game.drop.position.y = game.crane.position.y + 85
 
     }
-     
+     //updates the images on the block menu
         func updateBlocks(){
             for i in 0..<randomBlockArray.count {
                     let image = UIImage(named: randomBlockArray[i].imageID)
@@ -245,13 +241,13 @@ class GameViewController: UIViewController {
     
     
     
-    
+    //adds score
     func addScore(){
         score += 5
         scoreOutlet.text = "Score: \(score)"
     }
     
-    
+    //buttons to move camera
     @IBAction func leftAction(_ sender: UIButton) {
         AppData.moveLeft = true
     }
@@ -262,9 +258,6 @@ class GameViewController: UIViewController {
     }
     
     
-    @IBAction func leftActionEnd2(_ sender: UIButton) {
-        AppData.moveLeft = false
-    }
     
     @IBAction func rightAction(_ sender: UIButton) {
         AppData.moveRight = true
@@ -272,11 +265,6 @@ class GameViewController: UIViewController {
     
     
     @IBAction func rightActionEnd(_ sender: UIButton) {
-        AppData.moveRight = false
-    }
-    
-    
-    @IBAction func rightActionEnd2(_ sender: UIButton) {
         AppData.moveRight = false
     }
     

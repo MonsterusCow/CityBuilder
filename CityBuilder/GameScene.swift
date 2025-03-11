@@ -114,6 +114,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let bodyB = contact.bodyB.node!
         if bodyA.position.x > (bodyB.position.x - (bodyB.frame.height/2)) && bodyA.position.x < (bodyB.position.x + (bodyB.frame.height/2)){
             print("good align")
+            AppData.view.addScore()
         }
     }
     
@@ -142,14 +143,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     override func update(_ currentTime: TimeInterval) {
         //        print(crane.position.y)
-    
-        if AppData.moveLeft{
-            cam.position.x -= 5
+        if cam.position.x > 0 + 1450{
+            if AppData.moveLeft{
+                cam.position.x -= 5
+            }
         }
-           
-        if AppData.moveRight{
-            cam.position.x += 5
+      
+        if cam.position.x < 3200 - 1450{
+            if AppData.moveRight{
+                cam.position.x += 5
+            }
         }
+      
         
         
     }

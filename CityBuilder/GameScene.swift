@@ -66,6 +66,42 @@ func createBuilding(position: CGPoint, block: Block, sizex: Int, sizey: Int, sce
 }
 
 
+
+//func moveCraneToBuilding(_ building: Building) {
+//    game = scene as? GameScene
+//    guard let gameScene = game.view?.scene else { return }
+//    
+//    let crane = game.crane  // Assuming you have a crane reference
+//    let string = game.string
+//    let drop = game.drop
+//    
+//    // 1. Move crane horizontally to the building
+//    let moveHorizontally = SKAction.moveTo(x: building.sprite.position.x, duration: 1.0)
+//    
+//    // 2. Lower crane to building's height
+//    let lowerCrane = SKAction.moveTo(y: building.sprite.position.y + 100, duration: 1.0)
+//    
+//    // 3. Attach the building (simulate picking up)
+//    let grabBlock = SKAction.run {
+//        game.holding = true
+//        building.sprite.position.y = crane.position.y - 100
+//        game.physicalBuildings.append(building.sprite) // Add it to the list
+//    }
+//    
+//    // 4. Raise crane back up
+//    let raiseCrane = SKAction.moveTo(y: game.initialCraneY, duration: 1.0)
+//    
+//    // 5. Sequence of actions
+//    let sequence = SKAction.sequence([moveHorizontally, lowerCrane, grabBlock, raiseCrane])
+//    
+//    // Run animation on crane
+//    crane.run(sequence)
+//    
+//    // Sync string & drop with crane movement
+//    string.run(sequence)
+//    drop.run(sequence)
+//}
+
 // Function to drop the last created building
 func dropBuilding() {
     guard let lastBuilding = allBuildings.last else { return }

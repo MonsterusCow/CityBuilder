@@ -89,9 +89,11 @@ class GameViewController: UIViewController {
         let touchLocation = sender.location(in: view)
             if let scene = game.view?.scene {
                 let convertedLocation = scene.convertPoint(fromView: touchLocation)
-                if game.drop.contains(convertedLocation) {
+                let dropLocalLocation = game.crane.convert(convertedLocation, from: scene)
+                if game.crane.childNode(withName: "drop")!.contains(dropLocalLocation) {
                     dropBuilding()
                     game.holding = false
+                    print("www")
                 }
             }
     }
@@ -102,8 +104,8 @@ class GameViewController: UIViewController {
                     let convertedLocation = scene.convertPoint(fromView: touchLocation)
                     
                     game.crane.position.x = convertedLocation.x
-                    game.string.position.x = convertedLocation.x
-                    game.drop.position.x = convertedLocation.x
+//                    game.string.position.x = convertedLocation.x
+//                    game.drop.position.x = convertedLocation.x
                     
                     if game.holding, let lastBuilding = allBuildings.last {
                         lastBuilding.sprite.position.x = convertedLocation.x
@@ -128,6 +130,7 @@ class GameViewController: UIViewController {
         
         // Select block based on button press
         if !game.holding {
+            // Select block based on button press
             if button0.isTouchInside {
                 block = randomBlockArray[0]
             } else if button1.isTouchInside {
@@ -138,6 +141,7 @@ class GameViewController: UIViewController {
                 block = randomBlockArray[3]
             } else {
                 block = randomBlockArray[4]
+                randomBlockArray.remove(at: 4)
             }
             randomBlockArray.removeAll()
             
@@ -164,6 +168,8 @@ class GameViewController: UIViewController {
                 lastRandomNumber = random
                 randomBlockArray.append(blockArray[random])
             }
+            lastRandomNumber = random
+            randomBlockArray.append(blockArray[random])
             
             updateBlocks()
             checkHeight()
@@ -221,8 +227,8 @@ class GameViewController: UIViewController {
                lastBuilding.sprite.position.y = game.crane.position.y - 100
            }
 
-           game.string.position.y = game.crane.position.y + 280
-           game.drop.position.y = game.crane.position.y + 85
+//           game.string.position.y = game.crane.position.y + 280
+//           game.drop.position.y = game.crane.position.y + 85
 
     }
      //updates the images on the block menu

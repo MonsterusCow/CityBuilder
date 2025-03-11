@@ -31,24 +31,21 @@ class Building {
         self.height = Double(size.height)
         self.width = Double(size.width)
 
-        // Create and configure the sprite
         self.sprite = SKSpriteNode(texture: SKTexture(imageNamed: block.imageID), size: size)
         self.sprite.position = position
         self.sprite.zPosition = 3
-        
-        // Add physics body
+//        
         self.sprite.physicsBody = SKPhysicsBody(texture: SKTexture(imageNamed: block.imageID), size: size)
         self.sprite.physicsBody?.isDynamic = true
-        self.sprite.physicsBody?.affectedByGravity = false
+        self.sprite.physicsBody?.affectedByGravity = true
         self.sprite.physicsBody?.allowsRotation = false
         self.sprite.physicsBody?.restitution = 0
         self.sprite.physicsBody?.linearDamping = 1
         self.sprite.physicsBody?.angularDamping = 0.2
-        self.sprite.physicsBody?.categoryBitMask = 0
-        self.sprite.physicsBody?.collisionBitMask = 0
-        self.sprite.physicsBody?.contactTestBitMask = 0
+        self.sprite.physicsBody?.categoryBitMask = 1
+        self.sprite.physicsBody?.collisionBitMask = 1
+        self.sprite.physicsBody?.contactTestBitMask = 1
 
-        // Add to the scene
         scene.addChild(self.sprite)
     }
 }
@@ -57,50 +54,52 @@ class Building {
 var allBuildings: [Building] = []
 
 // Function to create and place a building
-func createBuilding(position: CGPoint, block: Block, sizex: Int, sizey: Int, scene: SKScene) {
+func createBuilding(block: Block, sizex: Int, sizey: Int, scene: GameScene) {
     let size = CGSize(width: sizex, height: sizey)
-    let building = Building(block: block, position: position, size: size, scene: scene)
+    let building = Building(block: block, position: CGPoint(x: scene.construction.position.x, y: (scene.construction.position.y-300)), size: size, scene: scene)
     allBuildings.append(building)
     
-//    moveCraneToBuilding(building)
+    moveCraneToBuilding(building: building, game: scene)
 }
 
 
 
-//func moveCraneToBuilding(_ building: Building) {
-//    game = scene as? GameScene
-//    guard let gameScene = game.view?.scene else { return }
-//    
-//    let crane = game.crane  // Assuming you have a crane reference
-//    let string = game.string
-//    let drop = game.drop
-//    
-//    // 1. Move crane horizontally to the building
-//    let moveHorizontally = SKAction.moveTo(x: building.sprite.position.x, duration: 1.0)
-//    
-//    // 2. Lower crane to building's height
-//    let lowerCrane = SKAction.moveTo(y: building.sprite.position.y + 100, duration: 1.0)
-//    
-//    // 3. Attach the building (simulate picking up)
-//    let grabBlock = SKAction.run {
-//        game.holding = true
-//        building.sprite.position.y = crane.position.y - 100
-//        game.physicalBuildings.append(building.sprite) // Add it to the list
-//    }
-//    
-//    // 4. Raise crane back up
-//    let raiseCrane = SKAction.moveTo(y: game.initialCraneY, duration: 1.0)
-//    
-//    // 5. Sequence of actions
-//    let sequence = SKAction.sequence([moveHorizontally, lowerCrane, grabBlock, raiseCrane])
-//    
-//    // Run animation on crane
-//    crane.run(sequence)
-//    
-//    // Sync string & drop with crane movement
-//    string.run(sequence)
-//    drop.run(sequence)
-//}
+func moveCraneToBuilding(building: Building,game: GameScene) {
+    guard let gameScene = game.view?.scene else { return }
+    
+   
+    
+    // 1. Move crane horizontally to the building
+    let moveHorizontally = SKAction.moveTo(x: building.sprite.position.x, duration: 0.5)
+    
+    // 2. Lower crane to building's height
+    let lowerCrane = SKAction.moveTo(y: building.sprite.position.y + 100, duration: 0.75)
+    
+    // 3. Attach the building (simulate picking up)
+    let grabBlock = SKAction.run {
+        game.holding = true
+        building.sprite.position.y = game.crane.position.y - 100
+        game.physicalBuildings.append(building.sprite)
+    }
+    
+    // 4. Raise crane back up
+    let raiseCrane = SKAction.customAction(withDuration: 1.0) { node, elapsedTime in
+            building.sprite.physicsBody?.affectedByGravity = false
+        building.sprite.physicsBody?.categoryBitMask = 0
+        building.sprite.physicsBody?.collisionBitMask = 0
+        building.sprite.physicsBody?.contactTestBitMask = 0
+            let progress = elapsedTime / 1.0 // Normalize time (0 to 1)
+            let newY = game.initialCraneY * progress + (building.sprite.position.y + 100) * (1 - progress)
+            game.crane.position.y = newY
+            building.sprite.position.y = newY - 100
+        }
+    // 5. Sequence of actions
+    let sequence = SKAction.sequence([moveHorizontally, lowerCrane, grabBlock, raiseCrane])
+    
+    // Run animation on crane
+    game.crane.run(sequence)
+    
+}
 
 // Function to drop the last created building
 func dropBuilding() {
@@ -125,16 +124,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var buildings: [SKSpriteNode] = []
     var holding = false
     var initialCraneY = CGFloat(0)
+    var construction: SKSpriteNode!
     
     override func didMove(to view: SKView) {
         
        
         
         physicsWorld.contactDelegate = self
-        drop = self.childNode(withName: "drop") as? SKSpriteNode
-        string = self.childNode(withName: "string") as? SKSpriteNode
-        background = (self.childNode(withName: "background") as! SKSpriteNode)
         crane = (self.childNode(withName: "crane") as! SKSpriteNode)
+        drop = crane.childNode(withName: "drop") as? SKSpriteNode
+        string = crane.childNode(withName: "string") as? SKSpriteNode
+        background = (self.childNode(withName: "background") as! SKSpriteNode)
+        construction = (self.childNode(withName: "construction") as! SKSpriteNode)
         self.camera = cam
         cam.position = background.position
         cam.position.y -= 80
@@ -180,11 +181,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         //        print(crane.position.y)
     
         if AppData.moveLeft{
-            cam.position.x -= 5
+            cam.position.x -= 20
         }
            
         if AppData.moveRight{
-            cam.position.x += 5
+            cam.position.x += 20
         }
         
         

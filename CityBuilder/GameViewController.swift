@@ -93,9 +93,11 @@ class GameViewController: UIViewController {
         let touchLocation = sender.location(in: view)
             if let scene = game.view?.scene {
                 let convertedLocation = scene.convertPoint(fromView: touchLocation)
-                if game.drop.contains(convertedLocation) {
+                let dropLocalLocation = game.crane.convert(convertedLocation, from: scene)
+                if game.crane.childNode(withName: "drop")!.contains(dropLocalLocation) {
                     dropBuilding()
                     game.holding = false
+                    print("www")
                 }
             }
     }
@@ -106,8 +108,8 @@ class GameViewController: UIViewController {
                     let convertedLocation = scene.convertPoint(fromView: touchLocation)
                     
                     game.crane.position.x = convertedLocation.x
-                    game.string.position.x = convertedLocation.x
-                    game.drop.position.x = convertedLocation.x
+//                    game.string.position.x = convertedLocation.x
+//                    game.drop.position.x = convertedLocation.x
                     
                     if game.holding, let lastBuilding = allBuildings.last {
                         lastBuilding.sprite.position.x = convertedLocation.x
@@ -130,6 +132,7 @@ class GameViewController: UIViewController {
                 randomBlockArray.append(blockArray[random])
             }
             
+        if !game.holding {
             // Select block based on button press
             if button0.isTouchInside {
                 block = randomBlockArray[0]
@@ -148,31 +151,27 @@ class GameViewController: UIViewController {
                 randomBlockArray.remove(at: 4)
             }
 
-            if !game.holding {
-                let size: CGSize
-                switch block.imageID {
-                    case "brick": size = CGSize(width: 200, height: 100)
-                    case "goop": size = CGSize(width: 150, height: 45)
-                    case "window": size = CGSize(width: 200, height: 70)
-                    default: size = CGSize(width: 100, height: 100)
-                }
-
-                createBuilding(position: CGPoint(x: game.crane.position.x, y: game.crane.position.y - 100),
-                               block: block, sizex: Int(size.width), sizey: Int(size.height),
-                               scene: game.view!.scene!)
-                
-                game.holding = true
+            let size: CGSize
+            switch block.imageID {
+            case "brick": size = CGSize(width: 200, height: 100)
+            case "goop": size = CGSize(width: 150, height: 45)
+            case "window": size = CGSize(width: 200, height: 70)
+            default: size = CGSize(width: 100, height: 100)
             }
-
+            
+            createBuilding(block: block, sizex: Int(size.width), sizey: Int(size.height), scene: game)
+            game.holding = true
+            
             var random = Int.random(in: 0..<3)
             while random == lastRandomNumber {
                 random = Int.random(in: 0..<3)
             }
             lastRandomNumber = random
             randomBlockArray.append(blockArray[random])
-
+            
             updateBlocks()
             checkHeight()
+        }
     }
         
     func checkHeight(){
@@ -225,8 +224,8 @@ class GameViewController: UIViewController {
                lastBuilding.sprite.position.y = game.crane.position.y - 100
            }
 
-           game.string.position.y = game.crane.position.y + 280
-           game.drop.position.y = game.crane.position.y + 85
+//           game.string.position.y = game.crane.position.y + 280
+//           game.drop.position.y = game.crane.position.y + 85
 
     }
      

@@ -253,13 +253,34 @@ class GameViewController: UIViewController {
     
     
     @IBAction func leftAction(_ sender: UIButton) {
-//        AppData.moveLeft = true
+        AppData.moveLeft = true
     }
     
+
+    @IBAction func leftActionEnd(_ sender: UIButton) {
+        AppData.moveLeft = false
+    }
+    
+    
+    @IBAction func leftActionEnd2(_ sender: UIButton) {
+        AppData.moveLeft = false
+    }
     
     @IBAction func rightAction(_ sender: UIButton) {
-//        AppData.moveRight = true
+        AppData.moveRight = true
     }
+    
+    
+    @IBAction func rightActionEnd(_ sender: UIButton) {
+        AppData.moveRight = false
+    }
+    
+    
+    @IBAction func rightActionEnd2(_ sender: UIButton) {
+        AppData.moveRight = false
+    }
+    
+    
     
         
     }

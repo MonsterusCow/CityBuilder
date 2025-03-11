@@ -179,13 +179,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     override func update(_ currentTime: TimeInterval) {
         //        print(crane.position.y)
     
-//        if AppData.moveLeft{
-//            cam.position.x -= 1
-//        }
-//           
-//        if AppData.moveRight{
-//            cam.position.x += 1
-//        }
+        if AppData.moveLeft{
+            cam.position.x -= 5
+        }
+           
+        if AppData.moveRight{
+            cam.position.x += 5
+        }
         
         
     }

@@ -22,7 +22,7 @@ class AppData{
 class GameViewController: UIViewController {
     
     var game: GameScene!
-    var blockArray: [Block] = [Block(name: "brick", imageID: "brick"),Block(name: "window", imageID: "window"),Block(name: "goop", imageID: "goop")]
+    var blockArray: [Block] = [Block(name: "brick", imageID: "brick", rarity: 1.0),Block(name: "window", imageID: "window", rarity: 0.7),Block(name: "goop", imageID: "goop", rarity: 0.5)]
     var randomBlockArray: [Block] = []
     
     var score = 0
@@ -52,16 +52,7 @@ class GameViewController: UIViewController {
         
         buttonArray = [self.button0,self.button1,self.button2,self.button3,self.button4]
         
-        for _ in 0...4{
-            var random = Int.random(in: 0...2)
-            
-            while random == lastRandomNumber{
-                random = Int.random(in: 0...2)
-            }
-            lastRandomNumber = random
-            
-            randomBlockArray.append(blockArray[random])
-        }
+        addBlocksToRandomArray()
         updateBlocks()
         
         if let view = self.view as! SKView? {
@@ -120,14 +111,7 @@ class GameViewController: UIViewController {
         var block: Block
         
         // Ensure at least 5 blocks in the queue
-        while randomBlockArray.count < 5 {
-            var random = Int.random(in: 0..<3)
-            while random == lastRandomNumber {
-                random = Int.random(in: 0..<3)
-            }
-            lastRandomNumber = random
-            randomBlockArray.append(blockArray[random])
-        }
+        addBlocksToRandomArray()
         
         // Select block based on button press
         if !game.holding {
@@ -155,17 +139,7 @@ class GameViewController: UIViewController {
             }
             
             
-            var random = 0
-            while randomBlockArray.count < 5 {
-                random = Int.random(in: 0..<3)
-                while random == lastRandomNumber {
-                    random = Int.random(in: 0..<3)
-                }
-                lastRandomNumber = random
-                randomBlockArray.append(blockArray[random])
-            }
-            lastRandomNumber = random
-            randomBlockArray.append(blockArray[random])
+            addBlocksToRandomArray()
             
             updateBlocks()
             checkHeight()
@@ -272,7 +246,36 @@ class GameViewController: UIViewController {
         AppData.moveRight = false
     }
     
-    
+    func addBlocksToRandomArray(){
+        while randomBlockArray.count < 5 {
+            var randomTo = 0.0
+            var blockArrayByRarity : [Double] = []
+            for i in 0...blockArray.count-1 {
+                randomTo += blockArray[i].rarity
+                blockArrayByRarity.append(blockArray[i].rarity)
+            }
+            let random = Double.random(in: 0..<randomTo)
+            var nextRarity = 0.0
+            var thisRarity = 0.0
+            var chosenIndex : Int!
+            for i in 0...blockArrayByRarity.count-1{
+                nextRarity += blockArrayByRarity[i]
+                if i != 0{
+                    thisRarity += blockArrayByRarity[i-1]
+                }
+              
+                if random >= thisRarity && random <= nextRarity{
+                    chosenIndex = i
+                }
+                print(random)
+                print(nextRarity)
+                print(thisRarity)
+            }
+            
+            randomBlockArray.append(blockArray[chosenIndex])
+            
+        }
+    }
     
         
     }

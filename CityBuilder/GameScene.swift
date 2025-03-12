@@ -12,10 +12,13 @@ import GameplayKit
 class Block {
     var name: String
     var imageID: String
+    //between 0-1
+    var rarity: Double
 
-    init(name: String, imageID: String) {
+    init(name: String, imageID: String, rarity: Double) {
         self.name = name
         self.imageID = imageID
+        self.rarity = rarity
     }
 }
 

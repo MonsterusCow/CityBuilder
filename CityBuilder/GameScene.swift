@@ -65,50 +65,52 @@ func createBuilding(block: Block, sizex: Int, sizey: Int, scene: GameScene) {
 
 
 func moveCraneToBuilding(building: Building,game: GameScene) {
-    guard let gameScene = game.view?.scene else { return }
+    game.moving = true
+    let moveHorizontally = SKAction.moveTo(x: building.sprite.position.x, duration: 1)
     
-   
+    let openCrane = SKAction.run {game.crane.texture = SKTexture(image: UIImage(named: "open_claw")!)}
+    let lowerCrane = SKAction.moveTo(y: building.sprite.position.y, duration: 0.75)
     
-    // 1. Move crane horizontally to the building
-    let moveHorizontally = SKAction.moveTo(x: building.sprite.position.x, duration: 0.5)
-    
-    // 2. Lower crane to building's height
-    let lowerCrane = SKAction.moveTo(y: building.sprite.position.y + 100, duration: 0.75)
-    
-    // 3. Attach the building (simulate picking up)
     let grabBlock = SKAction.run {
         game.holding = true
         building.sprite.position.y = game.crane.position.y - 100
         game.physicalBuildings.append(building.sprite)
     }
     
-    // 4. Raise crane back up
-    let raiseCrane = SKAction.customAction(withDuration: 1.0) { node, elapsedTime in
+    let raiseCrane = SKAction.group([
+        SKAction.moveTo(y: game.initialCraneY, duration: 0.75),
+        SKAction.run {
             building.sprite.physicsBody?.affectedByGravity = false
-        building.sprite.physicsBody?.categoryBitMask = 0
-        building.sprite.physicsBody?.collisionBitMask = 0
-        building.sprite.physicsBody?.contactTestBitMask = 0
-            let progress = elapsedTime / 1.0 // Normalize time (0 to 1)
-            let newY = game.initialCraneY * progress + (building.sprite.position.y + 100) * (1 - progress)
-            game.crane.position.y = newY
-            building.sprite.position.y = newY - 100
+            building.sprite.physicsBody?.categoryBitMask = 0
+            building.sprite.physicsBody?.collisionBitMask = 0
+            building.sprite.physicsBody?.contactTestBitMask = 0
+        },
+        SKAction.run {
+            building.sprite.run(SKAction.moveTo(y: game.initialCraneY - 100, duration: 0.75))
         }
-    // 5. Sequence of actions
-    let sequence = SKAction.sequence([moveHorizontally, lowerCrane, grabBlock, raiseCrane])
+    ])
     
-    // Run animation on crane
+    let moveBack = SKAction.moveTo(x: game.construction.position.x+CGFloat((300+Int.random(in: 0...200))), duration: 0.75)
+    
+    let finish = SKAction.run {
+        building.sprite.position.x = game.crane.position.x
+        game.moving = false
+    }
+    
+    let sequence = SKAction.sequence([moveHorizontally, openCrane, lowerCrane, grabBlock, raiseCrane, moveBack, finish])
     game.crane.run(sequence)
-    
 }
 
 // Function to drop the last created building
-func dropBuilding() {
-    guard let lastBuilding = allBuildings.last else { return }
-    
-    lastBuilding.sprite.physicsBody?.affectedByGravity = true
-    lastBuilding.sprite.physicsBody?.categoryBitMask = 1
-    lastBuilding.sprite.physicsBody?.contactTestBitMask = 1
-    lastBuilding.sprite.physicsBody?.collisionBitMask = 1
+func dropBuilding(game: GameScene) {
+    allBuildings.last!.sprite.removeFromParent()
+    game.addChild(allBuildings.last!.sprite)
+    allBuildings.last!.sprite.physicsBody?.affectedByGravity = true
+    allBuildings.last!.sprite.physicsBody?.categoryBitMask = 1
+    allBuildings.last!.sprite.physicsBody?.contactTestBitMask = 1
+    allBuildings.last!.sprite.physicsBody?.collisionBitMask = 1
+    allBuildings.last!.sprite.physicsBody?.mass = 20
+    game.crane.texture = SKTexture(image: UIImage(named: "claw")!)
 }
 
 class GameScene: SKScene, SKPhysicsContactDelegate {
@@ -118,40 +120,46 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
    
     var drop: SKSpriteNode!
     var cam = SKCameraNode()
-    var background: SKSpriteNode!
+    var backgroundT: SKSpriteNode!
+    var backgroundB: SKSpriteNode!
     var crane : SKSpriteNode!
     var string: SKSpriteNode!
     var buildings: [SKSpriteNode] = []
     var holding = false
     var initialCraneY = CGFloat(0)
     var construction: SKSpriteNode!
+    var moving = false
+
     
     override func didMove(to view: SKView) {
-        
-       
-        
         physicsWorld.contactDelegate = self
         crane = (self.childNode(withName: "crane") as! SKSpriteNode)
         drop = crane.childNode(withName: "drop") as? SKSpriteNode
         string = crane.childNode(withName: "string") as? SKSpriteNode
-        background = (self.childNode(withName: "background") as! SKSpriteNode)
+        backgroundT = (self.childNode(withName: "backgroundT") as! SKSpriteNode)
+        backgroundB = (self.childNode(withName: "backgroundB") as! SKSpriteNode)
         construction = (self.childNode(withName: "construction") as! SKSpriteNode)
         self.camera = cam
-        cam.position = background.position
-        cam.position.y -= 80
-        cam.setScale(max(background.size.width / self.size.width, background.size.height / self.size.height))
+        cam.position.y = backgroundT.position.y + (backgroundB.position.y-backgroundT.position.y)
+        cam.position.x = crane.position.x
+        cam.setScale(1.3)
+        print(cam.frame.width)
+//        cam.position.y -= 80
+//        cam.setScale(max(background.size.width / self.size.width, background.size.height / self.size.height))
         initialCraneY = crane.position.y
 
 //        createBuilding(position: CGPoint(x: crane.position.x, y: crane.position.y-100), block: Block(name: "road", imageID: "street"), sizex: 200, sizey: 200, scene: self)
-        
     }
     
     func didBegin(_ contact: SKPhysicsContact) {
         let bodyA = contact.bodyA.node!
         let bodyB = contact.bodyB.node!
-        if bodyA.position.x > (bodyB.position.x - (bodyB.frame.height/2)) && bodyA.position.x < (bodyB.position.x + (bodyB.frame.height/2)){
-            print("good align")
-            AppData.view.addScore()
+        if bodyA.name != "ground" && bodyB.name != "ground" {
+            if bodyA.position.x > (bodyB.position.x - (bodyB.frame.height/2)) && bodyA.position.x < (bodyB.position.x + (bodyB.frame.height/2)){
+                print("good align")
+                AppData.view?.score += 10
+                AppData.view?.scoreOutlet.text = "Score: \(AppData.view!.score)"
+            }
         }
     }
     
@@ -180,18 +188,37 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     override func update(_ currentTime: TimeInterval) {
         //        print(crane.position.y)
-        if cam.position.x > 0 + 1450{
+        if !moving{
             if AppData.moveLeft{
-                cam.position.x -= 5
+                if cam.position.x > ((self.size.width * cam.xScale)/2+25){
+//                    print("cam: \(cam.position.x)")
+//                    print("Visible Width: \(self.size.width * cam.xScale)")
+//                    print("Min X (Leftmost): \((self.size.width * cam.xScale)/2)")
+                    cam.position.x -= 25
+                } else {
+                    cam.position.x = (self.size.width * cam.xScale)/2
+                }
             }
-        }
-      
-        if cam.position.x < 3200 - 1450{
             if AppData.moveRight{
-                cam.position.x += 5
+                if cam.position.x < ((backgroundT.position.x+backgroundT.frame.width/2) - ((self.size.width * cam.xScale)/2)-25){
+                    cam.position.x += 25
+                } else {
+                    cam.position.x = (backgroundT.position.x+backgroundT.frame.width/2) - ((self.size.width * cam.xScale)/2)
+                }
             }
         }
-      
+        if moving{
+                cam.position.x = crane.position.x
+            if cam.position.x < ((self.size.width * cam.xScale)/2) {
+                cam.position.x = ((self.size.width * cam.xScale)/2)
+            }
+            if holding{
+                allBuildings.last!.sprite.position = CGPoint(x: crane.position.x, y: crane.position.y-100)
+                AppData.view.checkHeight()
+            }
+        }
+    
+        
         
         
     }

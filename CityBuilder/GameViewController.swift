@@ -52,11 +52,11 @@ class GameViewController: UIViewController {
         
         buttonArray = [self.button0,self.button1,self.button2,self.button3,self.button4]
         
-        for _ in 0..<5{
-            var random = Int.random(in: 0..<3)
+        for _ in 0...4{
+            var random = Int.random(in: 0...2)
             
             while random == lastRandomNumber{
-               random = Int.random(in: 0..<3)
+                random = Int.random(in: 0...2)
             }
             lastRandomNumber = random
             
@@ -91,7 +91,7 @@ class GameViewController: UIViewController {
                 let convertedLocation = scene.convertPoint(fromView: touchLocation)
                 let dropLocalLocation = game.crane.convert(convertedLocation, from: scene)
                 if game.crane.childNode(withName: "drop")!.contains(dropLocalLocation) {
-                    dropBuilding()
+                    dropBuilding(game: game)
                     game.holding = false
                     print("www")
                 }
@@ -99,20 +99,21 @@ class GameViewController: UIViewController {
     }
         
         @IBAction func panAction(_ sender: UIPanGestureRecognizer) {
-            let touchLocation = sender.location(in: view)
+            if !game.moving{
+                let touchLocation = sender.location(in: view)
                 if let scene = game.view?.scene {
                     let convertedLocation = scene.convertPoint(fromView: touchLocation)
                     
                     game.crane.position.x = convertedLocation.x
-//                    game.string.position.x = convertedLocation.x
-//                    game.drop.position.x = convertedLocation.x
                     
                     if game.holding, let lastBuilding = allBuildings.last {
                         lastBuilding.sprite.position.x = convertedLocation.x
                     }
-
+                    
+                    
                     checkHeight()
                 }
+            }
         }
         
     @IBAction func Buttons(_ sender: Any) {
@@ -145,23 +146,18 @@ class GameViewController: UIViewController {
             }
             randomBlockArray.removeAll()
             
-            let size: CGSize
-            switch block.imageID {
-            case "brick": size = CGSize(width: 200, height: 100)
-            case "goop": size = CGSize(width: 150, height: 45)
-            case "window": size = CGSize(width: 200, height: 70)
-            default: size = CGSize(width: 100, height: 100)
+            if block.imageID == "brick"{
+                createBuilding(block: block, sizex: 200, sizey: 100, scene: game)
+            } else if block.imageID == "goop"{
+                createBuilding(block: block, sizex: 150, sizey: 45, scene: game)
+            } else if block.imageID == "window" {
+                createBuilding(block: block, sizex: 100, sizey: 100, scene: game)
             }
             
-            createBuilding(position: CGPoint(x: game.crane.position.x, y: game.crane.position.y - 100),
-                           block: block, sizex: Int(size.width), sizey: Int(size.height),
-                           scene: game.view!.scene!)
             
-            game.holding = true
-            
-            
+            var random = 0
             while randomBlockArray.count < 5 {
-                var random = Int.random(in: 0..<3)
+                random = Int.random(in: 0..<3)
                 while random == lastRandomNumber {
                     random = Int.random(in: 0..<3)
                 }
@@ -233,7 +229,7 @@ class GameViewController: UIViewController {
     }
      //updates the images on the block menu
         func updateBlocks(){
-            for i in 0..<randomBlockArray.count {
+            for i in 0...4 {
                     let image = UIImage(named: randomBlockArray[i].imageID)
                     UIGraphicsBeginImageContextWithOptions(CGSize(width: 110, height: 55), false, 1.0)
                     image?.draw(in: CGRect(origin: buttonArray[i].accessibilityActivationPoint, size: CGSize(width: 110, height: 55)))
@@ -243,6 +239,8 @@ class GameViewController: UIViewController {
                     buttonArray[i].setTitle("", for: .normal)
                     buttonArray[i].setImage(newImage, for: .normal)
                 }
+            
+            
         }
     
     

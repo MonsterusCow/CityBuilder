@@ -106,6 +106,7 @@ func dropBuilding(game: GameScene) {
     allBuildings.last!.sprite.removeFromParent()
     game.addChild(allBuildings.last!.sprite)
     allBuildings.last!.sprite.physicsBody?.affectedByGravity = true
+    allBuildings.last!.sprite.physicsBody?.allowsRotation = true
     allBuildings.last!.sprite.physicsBody?.categoryBitMask = 1
     allBuildings.last!.sprite.physicsBody?.contactTestBitMask = 1
     allBuildings.last!.sprite.physicsBody?.collisionBitMask = 1

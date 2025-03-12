@@ -25,7 +25,7 @@ class GameViewController: UIViewController {
     var blockArray: [Block] = [Block(name: "brick", imageID: "brick"),Block(name: "window", imageID: "window"),Block(name: "goop", imageID: "goop")]
     var randomBlockArray: [Block] = []
     
-    var score = 0
+    var score = 0.0
     
     @IBOutlet weak var scoreOutlet: UILabel!
     

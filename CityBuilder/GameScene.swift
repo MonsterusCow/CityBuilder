@@ -34,8 +34,9 @@ class Building {
         self.sprite = SKSpriteNode(texture: SKTexture(imageNamed: block.imageID), size: size)
         self.sprite.position = position
         self.sprite.zPosition = 3
-//        
-        self.sprite.physicsBody = SKPhysicsBody(texture: SKTexture(imageNamed: block.imageID), size: size)
+
+//        self.sprite.physicsBody = SKPhysicsBody(texture: SKTexture(imageNamed: block.imageID), size: size) //makes alpha mask bodies
+        self.sprite.physicsBody = SKPhysicsBody(rectangleOf: size)
         self.sprite.physicsBody?.isDynamic = true
         self.sprite.physicsBody?.affectedByGravity = true
         self.sprite.physicsBody?.allowsRotation = false
@@ -156,10 +157,35 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let bodyA = contact.bodyA.node!
         let bodyB = contact.bodyB.node!
         if bodyA.name != "ground" && bodyB.name != "ground" {
-            if bodyA.position.x > (bodyB.position.x - (bodyB.frame.height/2)) && bodyA.position.x < (bodyB.position.x + (bodyB.frame.height/2)){
+            print("bodyA: \(bodyA)")
+            print("bodyB: \(bodyB)")
+            //if blocks allign middles
+            var score = 0.0
+            if bodyA.position.x > (bodyB.position.x - (bodyB.frame.width/10)) && bodyA.position.x < (bodyB.position.x + (bodyB.frame.width/10)){
+                score += 10.0
+                if bodyA.position.y < bodyB.position.y && bodyA.frame.width > bodyB.frame.width || bodyB.position.y < bodyA.position.y && bodyB.frame.width > bodyA.frame.width {
+                    score *= 1.5
+                }
                 print("good align")
-                AppData.view?.score += 10
+                AppData.view?.score += score
                 AppData.view?.scoreOutlet.text = "Score: \(AppData.view!.score)"
+            }
+            
+            //if blocks allign edges
+            if bodyA.frame.width != bodyB.frame.width{
+                let bodyAedgeL = bodyA.position.x-bodyA.frame.width/2
+                let bodyAedgeR = bodyA.position.x+bodyA.frame.width/2
+                let bodyBedgeL = bodyB.position.x-bodyB.frame.width/2
+                let bodyBedgeR = bodyB.position.x+bodyB.frame.width/2
+                if bodyAedgeL > bodyBedgeL-10 && bodyAedgeL < bodyBedgeL+10{
+                    score += 10
+                }
+                if bodyAedgeR > bodyBedgeR-10 && bodyAedgeR < bodyBedgeR+10{
+                    score += 10
+                }
+                AppData.view?.score += score
+                AppData.view?.scoreOutlet.text = "Score: \(AppData.view!.score)"
+
             }
         }
     }
@@ -209,9 +235,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             }
         }
         if moving{
-                cam.position.x = crane.position.x
-            if cam.position.x < ((self.size.width * cam.xScale)/2) {
+            if cam.position.x <= ((self.size.width * cam.xScale)/2)+1 {
                 cam.position.x = ((self.size.width * cam.xScale)/2)
+            } else {
+                cam.position.x = crane.position.x
             }
             if holding{
                 allBuildings.last!.sprite.position = CGPoint(x: crane.position.x, y: crane.position.y-100)

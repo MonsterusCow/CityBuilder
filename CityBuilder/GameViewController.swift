@@ -22,7 +22,7 @@ class AppData{
 class GameViewController: UIViewController {
     
     var game: GameScene!
-    var blockArray: [Block] = [Block(name: "brick", imageID: "brick", rarity: 1.0),Block(name: "window", imageID: "window", rarity: 0.7),Block(name: "goop", imageID: "goop", rarity: 0.5), Block(name: "gold", imageID: "goop", rarity: 0.05)]
+    var blockArray: [Block] = [Block(name: "brick", imageID: "brick", rarity: 1.0),Block(name: "window", imageID: "window", rarity: 0.7),Block(name: "goop", imageID: "goop", rarity: 0.5), Block(name: "gold", imageID: "gold", rarity: 0.2)]
     var randomBlockArray: [Block] = []
     
     var score = 0.0
@@ -79,12 +79,13 @@ class GameViewController: UIViewController {
     @IBAction func tapAction(_ sender: UITapGestureRecognizer) {
         let touchLocation = sender.location(in: view)
             if let scene = game.view?.scene {
-                let convertedLocation = scene.convertPoint(fromView: touchLocation)
-                let dropLocalLocation = game.crane.convert(convertedLocation, from: scene)
-                if game.crane.childNode(withName: "drop")!.contains(dropLocalLocation) {
-                    dropBuilding(game: game)
-                    game.holding = false
-                    print("www")
+                if game.holding && !game.construction.contains(CGPoint(x:game.crane.position.x-(allBuildings.last!.width/2),y:game.construction.position.y)){
+                    let convertedLocation = scene.convertPoint(fromView: touchLocation)
+                    let dropLocalLocation = game.crane.convert(convertedLocation, from: scene)
+                    if game.crane.childNode(withName: "drop")!.contains(dropLocalLocation) {
+                        dropBuilding(game: game)
+                        game.holding = false
+                    }
                 }
             }
     }
@@ -136,6 +137,8 @@ class GameViewController: UIViewController {
                 createBuilding(block: block, sizex: 150, sizey: 45, scene: game)
             } else if block.imageID == "window" {
                 createBuilding(block: block, sizex: 100, sizey: 100, scene: game)
+            } else if block.imageID == "gold" {
+                createBuilding(block: block, sizex: 200, sizey: 100, scene: game)
             }
             
             
@@ -155,8 +158,8 @@ class GameViewController: UIViewController {
            for (i, building) in allBuildings.enumerated() {
                if game.holding && i == allBuildings.count - 1 { continue }
 
-               if game.crane.position.x >= building.sprite.position.x - (building.sprite.size.width / 2) - 125 &&
-                  game.crane.position.x <= building.sprite.position.x + (building.sprite.size.width / 2) + 125 {
+               if game.crane.position.x >= building.sprite.position.x - (building.sprite.size.width / 2) &&
+                  game.crane.position.x <= building.sprite.position.x + (building.sprite.size.width / 2) {
 
                    let buildingTop = building.sprite.position.y + building.sprite.size.height / 2
                    var verticalDistance: CGFloat = 0

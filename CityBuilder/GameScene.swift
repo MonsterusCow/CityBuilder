@@ -71,7 +71,7 @@ func createBuilding(block: Block, sizex: Int, sizey: Int, scene: GameScene) {
 
 func moveCraneToBuilding(building: Building,game: GameScene) {
     game.moving = true
-    let moveHorizontally = SKAction.moveTo(x: building.sprite.position.x, duration: 1)
+    let moveHorizontally = SKAction.moveTo(x: building.sprite.position.x, duration: 0.75)
     
     let openCrane = SKAction.run {game.crane.texture = SKTexture(image: UIImage(named: "open_claw")!)}
     let lowerCrane = SKAction.moveTo(y: building.sprite.position.y, duration: 0.75)
@@ -111,7 +111,9 @@ func dropBuilding(game: GameScene) {
     allBuildings.last!.sprite.removeFromParent()
     game.addChild(allBuildings.last!.sprite)
     allBuildings.last!.sprite.physicsBody?.affectedByGravity = true
-    allBuildings.last!.sprite.physicsBody?.allowsRotation = true
+    if allBuildings.last!.block.imageID != "gold"{
+        allBuildings.last!.sprite.physicsBody?.allowsRotation = true
+    }
     allBuildings.last!.sprite.physicsBody?.categoryBitMask = 1
     allBuildings.last!.sprite.physicsBody?.contactTestBitMask = 1
     allBuildings.last!.sprite.physicsBody?.collisionBitMask = 1
@@ -178,11 +180,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     func didBegin(_ contact: SKPhysicsContact) {
         let bodyA = contact.bodyA.node!
         let bodyB = contact.bodyB.node!
+        var score = 0.0
         if bodyA.name != "ground" && bodyB.name != "ground" {
             print("bodyA: \(bodyA)")
             print("bodyB: \(bodyB)")
             //if blocks allign middles
-            var score = 0.0
             if bodyA.position.x > (bodyB.position.x - (bodyB.frame.width/10)) && bodyA.position.x < (bodyB.position.x + (bodyB.frame.width/10)){
                 score += 10.0
                 if bodyA.position.y < bodyB.position.y && bodyA.frame.width > bodyB.frame.width || bodyB.position.y < bodyA.position.y && bodyB.frame.width > bodyA.frame.width {
@@ -207,12 +209,19 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 if bodyAedgeR > bodyBedgeR-5 && bodyAedgeR < bodyBedgeR+5{
                     score += 10
                 }
-                if score > 0{
+                if score != 0{
                     giveScoreIndicatior(at: CGPoint(x:crane.position.x,y:max(bodyA.position.y, bodyB.position.y)), score: score, game: self)
                 }
                 AppData.view?.score += score
                 AppData.view?.scoreOutlet.text = "Score: \(AppData.view!.score)"
 
+            }
+        } else {
+            if abs(bodyA.zRotation) > 0.785 || abs(bodyB.zRotation) > 0.785 {
+                score = -20
+                giveScoreIndicatior(at: CGPoint(x:crane.position.x,y:max(bodyA.position.y, bodyB.position.y)), score: score, game: self)
+                AppData.view?.score += score
+                AppData.view?.scoreOutlet.text = "Score: \(AppData.view!.score)"
             }
         }
     }

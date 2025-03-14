@@ -22,7 +22,7 @@ class AppData{
 class GameViewController: UIViewController {
     
     var game: GameScene!
-    var blockArray: [Block] = [Block(name: "brick", imageID: "brick", rarity: 1.0),Block(name: "window", imageID: "window", rarity: 0.7),Block(name: "goop", imageID: "goop", rarity: 0.5), Block(name: "gold", imageID: "gold", rarity: 0.2)]
+    var blockArray: [Block] = [Block(name: "brick", imageID: "brick", rarity: 1.0),Block(name: "window", imageID: "window", rarity: 0.7),Block(name: "goop", imageID: "goop", rarity: 0.5), Block(name: "gold", imageID: "gold", rarity: 02)]
     var randomBlockArray: [Block] = []
     
     var score = 0.0
@@ -157,9 +157,13 @@ class GameViewController: UIViewController {
 
            for (i, building) in allBuildings.enumerated() {
                if game.holding && i == allBuildings.count - 1 { continue }
-
-               if game.crane.position.x >= building.sprite.position.x - (building.sprite.size.width / 2) &&
-                  game.crane.position.x <= building.sprite.position.x + (building.sprite.size.width / 2) {
+               
+               var holdBuilding = allBuildings.last!.width/2
+               if !game.holding {
+                   holdBuilding = 0
+               }
+               if game.crane.position.x >= building.sprite.position.x - (building.sprite.frame.width / 2) - holdBuilding &&
+                    game.crane.position.x <= building.sprite.position.x + (building.sprite.frame.width / 2) + holdBuilding {
 
                    let buildingTop = building.sprite.position.y + building.sprite.size.height / 2
                    var verticalDistance: CGFloat = 0
@@ -185,15 +189,32 @@ class GameViewController: UIViewController {
            }
 
            if !shouldMoveUp {
+               let moveAction: SKAction
                if let highestY = highestBuildingY {
+                   
                    if game.holding, let heldBuilding = allBuildings.last {
                        game.crane.position.y = max(beginY, highestY + heldBuilding.sprite.size.height + 100)
+//                        moveAction = SKAction.moveTo(y: max(beginY, highestY + heldBuilding.sprite.size.height + 100), duration: 0.5)
+//                       moveAction.timingMode = .easeInEaseOut
+
                    } else {
                        game.crane.position.y = max(beginY, highestY + 100)
+//                    moveAction = SKAction.moveTo(y: max(beginY, highestY + 100), duration: 0.5)
+//                       moveAction.timingMode = .easeInEaseOut
+
                    }
                } else {
                    game.crane.position.y = beginY
+//                   moveAction = SKAction.moveTo(y: beginY, duration: 0.5)
+//                   moveAction.timingMode = .easeInEaseOut
+
                }
+//               game.crane.run(SKAction.sequence([
+//                   SKAction.run {
+//                       self.game.crane.removeAllActions()  // Ensures this move is prioritized
+//                   },
+//                   moveAction
+//               ]))
            }
 
            if game.holding, let lastBuilding = allBuildings.last {

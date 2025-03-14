@@ -155,6 +155,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var initialCraneY = CGFloat(0)
     var construction: SKSpriteNode!
     var moving = false
+    
 
     
     override func didMove(to view: SKView) {
@@ -281,6 +282,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 AppData.view.checkHeight()
             }
         }
+        if crane.position.y > initialCraneY + ((self.size.height * cam.yScale)/2)-300 {
+            cam.position.y = crane.position.y
+        } else {
+            cam.position.y = backgroundT.position.y + (backgroundB.position.y-backgroundT.position.y)
+        }
+        
     
         
         

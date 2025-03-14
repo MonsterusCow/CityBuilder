@@ -22,7 +22,7 @@ class AppData{
 class GameViewController: UIViewController {
     
     var game: GameScene!
-    var blockArray: [Block] = [Block(name: "brick", imageID: "brick", rarity: 1.0),Block(name: "window", imageID: "window", rarity: 0.7),Block(name: "goop", imageID: "goop", rarity: 0.5), Block(name: "gold", imageID: "gold", rarity: 0.2)]
+    var blockArray: [Block] = [Block(name: "brick", imageID: "brick", rarity: 1.0),Block(name: "window", imageID: "window", rarity: 0.7),Block(name: "goop", imageID: "goop", rarity: 0.5), Block(name: "gold", imageID: "gold", rarity: 0.2), Block(name: "I-Beam", imageID: "I-Beam", rarity: 0.7), Block(name: "wood", imageID: "wood", rarity: 1.0)]
     var randomBlockArray: [Block] = []
     
     var score = 0.0
@@ -138,6 +138,10 @@ class GameViewController: UIViewController {
             } else if block.imageID == "window" {
                 createBuilding(block: block, sizex: 100, sizey: 100, scene: game)
             } else if block.imageID == "gold" {
+                createBuilding(block: block, sizex: 200, sizey: 100, scene: game)
+            } else if block.imageID == "I-Beam" {
+                createBuilding(block: block, sizex: 300, sizey: 100, scene: game)
+            } else if block.imageID == "wood" {
                 createBuilding(block: block, sizex: 200, sizey: 100, scene: game)
             }
             
@@ -278,6 +282,11 @@ class GameViewController: UIViewController {
             randomBlockArray.append(blockArray[chosenIndex])
             
         }
+    }
+    
+    
+    @IBAction func HpwToPlayAction(_ sender: UIButton) {
+        performSegue(withIdentifier: "toTutorial", sender: self)
     }
     
         

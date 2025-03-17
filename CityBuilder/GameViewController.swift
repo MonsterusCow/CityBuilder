@@ -22,7 +22,8 @@ class AppData{
 class GameViewController: UIViewController {
     
     var game: GameScene!
-    var blockArray: [Block] = [Block(name: "brick", imageID: "brick", rarity: 1.0),Block(name: "window", imageID: "window", rarity: 0.7),Block(name: "goop", imageID: "goop", rarity: 0.5), Block(name: "gold", imageID: "gold", rarity: 0.2), Block(name: "I-Beam", imageID: "I-Beam", rarity: 0.7), Block(name: "wood", imageID: "wood", rarity: 1.0)]
+    var blockArray: [Block] = [Block(name: "brick", imageID: "brick", rarity: 1.0),Block(name: "window", imageID: "window", rarity: 0.7), Block(name: "gold", imageID: "gold", rarity: 0.2), Block(name: "I-Beam", imageID: "I-Beam", rarity: 0.7), Block(name: "wood", imageID: "wood", rarity: 1.0)]
+//    Block(name: "goop", imageID: "goop", rarity: 0.5)
     var randomBlockArray: [Block] = []
     
     var score = 0.0
@@ -140,9 +141,9 @@ class GameViewController: UIViewController {
             } else if block.imageID == "gold" {
                 createBuilding(block: block, sizex: 200, sizey: 100, scene: game)
             } else if block.imageID == "I-Beam" {
-                createBuilding(block: block, sizex: 300, sizey: 100, scene: game)
+                createBuilding(block: block, sizex: 350, sizey: 100, scene: game)
             } else if block.imageID == "wood" {
-                createBuilding(block: block, sizex: 200, sizey: 100, scene: game)
+                createBuilding(block: block, sizex: 180, sizey: 45, scene: game)
             }
             
             
@@ -295,9 +296,9 @@ class GameViewController: UIViewController {
                 if random >= thisRarity && random <= nextRarity{
                     chosenIndex = i
                 }
-                print(random)
-                print(nextRarity)
-                print(thisRarity)
+//                print(random)
+//                print(nextRarity)
+//                print(thisRarity)
             }
             
             randomBlockArray.append(blockArray[chosenIndex])

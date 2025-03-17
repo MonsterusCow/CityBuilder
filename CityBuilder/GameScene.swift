@@ -50,6 +50,7 @@ class Building {
         self.sprite.physicsBody?.categoryBitMask = 1
         self.sprite.physicsBody?.collisionBitMask = 1
         self.sprite.physicsBody?.contactTestBitMask = 1
+        self.sprite.physicsBody?.node?.name = block.name
 
         scene.addChild(self.sprite)
     }
@@ -121,11 +122,11 @@ func dropBuilding(game: GameScene) {
     game.crane.texture = SKTexture(image: UIImage(named: "claw")!)
 }
 
-func giveScoreIndicatior(at position: CGPoint, score: Double, game: GameScene) {
+func giveScoreIndicatior(at position: CGPoint, score: String, game: GameScene, color: UIColor) {
     let scoreLabel = SKLabelNode(fontNamed: "Arial-BoldMT")
-    scoreLabel.text = "+\(score)"
+    scoreLabel.text = score
     scoreLabel.fontSize = 45
-    scoreLabel.fontColor = .yellow
+    scoreLabel.fontColor = color
     scoreLabel.position = position
     scoreLabel.zPosition = 10
     
@@ -170,7 +171,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         cam.position.y = backgroundT.position.y + (backgroundB.position.y-backgroundT.position.y)
         cam.position.x = crane.position.x
         cam.setScale(1.3)
-        print(cam.frame.width)
+//        print(cam.frame.width)
 //        cam.position.y -= 80
 //        cam.setScale(max(background.size.width / self.size.width, background.size.height / self.size.height))
         initialCraneY = crane.position.y
@@ -182,47 +183,67 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let bodyA = contact.bodyA.node!
         let bodyB = contact.bodyB.node!
         var score = 0.0
-        if bodyA.name != "ground" && bodyB.name != "ground" {
-            print("bodyA: \(bodyA)")
-            print("bodyB: \(bodyB)")
-            //if blocks allign middles
-            if bodyA.position.x > (bodyB.position.x - (bodyB.frame.width/10)) && bodyA.position.x < (bodyB.position.x + (bodyB.frame.width/10)){
-                score += 10.0
-                if bodyA.position.y < bodyB.position.y && bodyA.frame.width > bodyB.frame.width || bodyB.position.y < bodyA.position.y && bodyB.frame.width > bodyA.frame.width {
-                    score *= 1.5
+        if (bodyA.name != "ground" && bodyB.name != "ground") && (bodyA.name != "Cground" && bodyB.name != "Cground") {
+//            print("bodyA: \(bodyA)")
+//            print("bodyB: \(bodyB)")
+            if bodyA.name == "wood" || bodyB.name == "wood"{
+                print("yes")
+                if bodyA.name == "I-Beam" || bodyB.name == "I-Beam"{
+                    var doit = false
+                    if bodyA.name == "I-Beam"{
+                        if bodyA.position.y > bodyB.position.y {
+                            doit = true
+                        }
+                    } else {
+                        if bodyB.position.y > bodyA.position.y {
+                            doit = true
+                        }
+                    }
+                    if doit{
+                        if bodyA.name == "wood"{
+                            bodyA.removeFromParent()
+                            giveScoreIndicatior(at: bodyA.position, score: "CRUSH", game: self, color: .red)
+                        } else {
+                            bodyB.removeFromParent()
+                            giveScoreIndicatior(at: bodyB.position, score: "CRUSH", game: self, color: .red)
+                        }
+                    }
                 }
-//                print("good align")
-                if score > 0{
-                    giveScoreIndicatior(at: CGPoint(x:crane.position.x,y:max(bodyA.position.y, bodyB.position.y)), score: score, game: self)
+            } else {
+                //if blocks allign middles
+                if bodyA.position.x > (bodyB.position.x - (bodyB.frame.width/10)) && bodyA.position.x < (bodyB.position.x + (bodyB.frame.width/10)){
+                    score += 10.0
+                    if bodyA.position.y < bodyB.position.y && bodyA.frame.width > bodyB.frame.width || bodyB.position.y < bodyA.position.y && bodyB.frame.width > bodyA.frame.width {
+                        score *= 1.5
+                    }
+                    if score > 0{
+                        giveScoreIndicatior(at: CGPoint(x:crane.position.x,y:max(bodyA.position.y, bodyB.position.y)), score: "+\(score)", game: self, color: .red)
+                    }
+                    AppData.view?.score += score
+                    AppData.view?.scoreOutlet.text = "Score: \(AppData.view!.score)"
+                } else if bodyA.frame.width != bodyB.frame.width{
+                    //if blocks allign edges
+                        let bodyAedgeL = bodyA.position.x-bodyA.frame.width/2
+                        let bodyAedgeR = bodyA.position.x+bodyA.frame.width/2
+                        let bodyBedgeL = bodyB.position.x-bodyB.frame.width/2
+                        let bodyBedgeR = bodyB.position.x+bodyB.frame.width/2
+                        if bodyAedgeL > bodyBedgeL-5 && bodyAedgeL < bodyBedgeL+5{
+                            score += 10
+                        }
+                        if bodyAedgeR > bodyBedgeR-5 && bodyAedgeR < bodyBedgeR+5{
+                            score += 10
+                        }
+                        if score != 0{
+                            giveScoreIndicatior(at: CGPoint(x:crane.position.x,y:max(bodyA.position.y, bodyB.position.y)), score: "+\(score)", game: self, color: .red)
+                        }
+                        AppData.view?.score += score
+                        AppData.view?.scoreOutlet.text = "Score: \(AppData.view!.score)"
+                } else if abs(bodyA.zRotation) > 0.785 || abs(bodyB.zRotation) > 0.785 {
+                        score = -20
+                        giveScoreIndicatior(at: CGPoint(x:crane.position.x,y:max(bodyA.position.y, bodyB.position.y)), score: "-20", game: self, color: .red)
+                        AppData.view?.score += score
+                        AppData.view?.scoreOutlet.text = "Score: \(AppData.view!.score)"
                 }
-                AppData.view?.score += score
-                AppData.view?.scoreOutlet.text = "Score: \(AppData.view!.score)"
-            } else
-            //if blocks allign edges
-            if bodyA.frame.width != bodyB.frame.width{
-                let bodyAedgeL = bodyA.position.x-bodyA.frame.width/2
-                let bodyAedgeR = bodyA.position.x+bodyA.frame.width/2
-                let bodyBedgeL = bodyB.position.x-bodyB.frame.width/2
-                let bodyBedgeR = bodyB.position.x+bodyB.frame.width/2
-                if bodyAedgeL > bodyBedgeL-5 && bodyAedgeL < bodyBedgeL+5{
-                    score += 10
-                }
-                if bodyAedgeR > bodyBedgeR-5 && bodyAedgeR < bodyBedgeR+5{
-                    score += 10
-                }
-                if score != 0{
-                    giveScoreIndicatior(at: CGPoint(x:crane.position.x,y:max(bodyA.position.y, bodyB.position.y)), score: score, game: self)
-                }
-                AppData.view?.score += score
-                AppData.view?.scoreOutlet.text = "Score: \(AppData.view!.score)"
-
-            }
-        } else {
-            if abs(bodyA.zRotation) > 0.785 || abs(bodyB.zRotation) > 0.785 {
-                score = -20
-                giveScoreIndicatior(at: CGPoint(x:crane.position.x,y:max(bodyA.position.y, bodyB.position.y)), score: score, game: self)
-                AppData.view?.score += score
-                AppData.view?.scoreOutlet.text = "Score: \(AppData.view!.score)"
             }
         }
     }
@@ -283,7 +304,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             }
         }
         if crane.position.y > initialCraneY + ((self.size.height * cam.yScale)/2)-300 {
-            cam.position.y = crane.position.y
+            cam.position.y = crane.position.y-100
         } else {
             cam.position.y = backgroundT.position.y + (backgroundB.position.y-backgroundT.position.y)
         }

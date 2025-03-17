@@ -140,7 +140,7 @@ class GameViewController: UIViewController {
             } else if block.imageID == "gold" {
                 createBuilding(block: block, sizex: 200, sizey: 100, scene: game)
             } else if block.imageID == "I-Beam" {
-                createBuilding(block: block, sizex: 300, sizey: 100, scene: game)
+                createBuilding(block: block, sizex: 350, sizey: 100, scene: game)
             } else if block.imageID == "wood" {
                 createBuilding(block: block, sizex: 200, sizey: 100, scene: game)
             } else if block.imageID == "billboard" {
@@ -299,9 +299,9 @@ class GameViewController: UIViewController {
                 if random >= thisRarity && random <= nextRarity{
                     chosenIndex = i
                 }
-                print(random)
-                print(nextRarity)
-                print(thisRarity)
+//                print(random)
+//                print(nextRarity)
+//                print(thisRarity)
             }
             
             randomBlockArray.append(blockArray[chosenIndex])

@@ -30,8 +30,10 @@
                                 </subviews>
                                 <gestureRecognizers/>
                                 <connections>
-                                    <outletCollection property="gestureRecognizers" destination="6bL-LP-2wo" appends="YES" id="lgk-rV-hxh"/>
                                     <outletCollection property="gestureRecognizers" destination="xCk-RO-OQz" appends="YES" id="oUZ-8j-dx9"/>
+                                    <outletCollection property="gestureRecognizers" destination="6bL-LP-2wo" appends="YES" id="4S6-0I-xEw"/>
+                                    <outletCollection property="gestureRecognizers" destination="6bL-LP-2wo" appends="YES" id="lgk-rV-hxh"/>
+                                    <outletCollection property="gestureRecognizers" destination="6bL-LP-2wo" appends="YES" id="N21-FK-UsG"/>
                                 </connections>
                             </view>
                             <stackView opaque="NO" contentMode="scaleToFill" distribution="equalCentering" spacing="32" translatesAutoresizingMaskIntoConstraints="NO" id="ZKa-tD-hhY">
@@ -139,6 +141,9 @@
                             <constraint firstItem="4qk-I5-YsI" firstAttribute="bottom" secondItem="ZKa-tD-hhY" secondAttribute="bottom" constant="10" id="kN8-C9-I2A"/>
                             <constraint firstItem="ZKa-tD-hhY" firstAttribute="leading" secondItem="4qk-I5-YsI" secondAttribute="leading" constant="46" id="vkg-x6-XxD"/>
                         </constraints>
+                        <connections>
+                            <outletCollection property="gestureRecognizers" destination="6bL-LP-2wo" appends="YES" id="fxE-US-TXO"/>
+                        </connections>
                     </view>
                     <navigationItem key="navigationItem" id="d1p-xt-nVd"/>
                     <connections>

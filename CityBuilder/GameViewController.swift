@@ -22,7 +22,7 @@ class AppData{
 class GameViewController: UIViewController {
     
     var game: GameScene!
-    var blockArray: [Block] = [Block(name: "brick", imageID: "brick", rarity: 1.0),Block(name: "window", imageID: "window", rarity: 0.7),Block(name: "goop", imageID: "goop", rarity: 0.5), Block(name: "gold", imageID: "gold", rarity: 0.2), Block(name: "I-Beam", imageID: "I-Beam", rarity: 0.7), Block(name: "wood", imageID: "wood", rarity: 1.0)]
+    var blockArray: [Block] = [Block(name: "brick", imageID: "brick", rarity: 1.0),Block(name: "window", imageID: "window", rarity: 0.7),Block(name: "goop", imageID: "goop", rarity: 0.5), Block(name: "gold", imageID: "gold", rarity: 0.2), Block(name: "I-Beam", imageID: "I-Beam", rarity: 0.7), Block(name: "wood", imageID: "wood", rarity: 1.0), Block(name: "billboard", imageID: "billboard", rarity: 1.0)]
     var randomBlockArray: [Block] = []
     
     var score = 0.0
@@ -143,6 +143,8 @@ class GameViewController: UIViewController {
                 createBuilding(block: block, sizex: 300, sizey: 100, scene: game)
             } else if block.imageID == "wood" {
                 createBuilding(block: block, sizex: 200, sizey: 100, scene: game)
+            } else if block.imageID == "billboard" {
+                createBuilding(block: block, sizex: 650, sizey: 400, scene: game)
             }
             
             
@@ -274,6 +276,8 @@ class GameViewController: UIViewController {
         AppData.moveRight = false
     }
     
+    
+    //cool rarity thing
     func addBlocksToRandomArray(){
         while randomBlockArray.count < 5 {
             var randomTo = 0.0

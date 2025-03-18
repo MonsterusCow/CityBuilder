@@ -22,7 +22,7 @@ class AppData{
 class GameViewController: UIViewController {
     
     var game: GameScene!
-    var blockArray: [Block] = [Block(name: "brick", imageID: "brick", rarity: 1.0),Block(name: "window", imageID: "window", rarity: 0.7),Block(name: "gold", imageID: "gold", rarity: 0.1), Block(name: "I-Beam", imageID: "I-Beam", rarity: 0.4), Block(name: "wood", imageID: "wood", rarity: 1.0), Block(name: "billboard", imageID: "billboard", rarity: 02)]
+    var blockArray: [Block] = [Block(name: "brick", imageID: "brick", rarity: 1.0),Block(name: "window", imageID: "window", rarity: 0.7),Block(name: "gold", imageID: "gold", rarity: 0.1), Block(name: "I-Beam", imageID: "I-Beam", rarity: 0.4), Block(name: "wood", imageID: "wood", rarity: 1.0), Block(name: "billboard", imageID: "billboard", rarity: 0.2)]
 //    Block(name: "goop", imageID: "goop", rarity: 0.5),
     var randomBlockArray: [Block] = []
     
@@ -40,7 +40,8 @@ class GameViewController: UIViewController {
     
     @IBOutlet weak var button4: UIButton!
     
-    
+    var moveButtons = false
+
     
     var lastRandomNumber = -1
     
@@ -98,6 +99,7 @@ class GameViewController: UIViewController {
                 if let scene = game.view?.scene {
                     let convertedLocation = scene.convertPoint(fromView: touchLocation)
                     
+                    game.checkForEdgeScroll(convertedLocation)
                     game.crane.position.x = convertedLocation.x
                     
                     if game.holding, let lastBuilding = allBuildings.last {
@@ -222,13 +224,12 @@ class GameViewController: UIViewController {
         
         if game.crane.position.y > (game.initialCraneY + ((game.size.height * game.cam.yScale)/2) - 400)  {
             print("did")
-//            let a = SKAction.rotate(byAngle: 3, duration: 1)
-//            game.cam.run(a)
-            game.cam.run(SKAction.moveTo(y: game.crane.position.y-100, duration: 0.25))
-//            game.cam.position.y = game.crane.position.y-100
+            //cam wont do skaction
+//            game.cam.run(SKAction.moveTo(y: game.crane.position.y-100, duration: 0.25))
+            game.cam.position.y = game.crane.position.y-100
         } else {
-            game.cam.run(SKAction.moveTo(y: game.backgroundT.position.y + (game.backgroundB.position.y-game.backgroundT.position.y), duration: 0.25))
-//            game.cam.position.y = game.backgroundT.position.y + (game.backgroundB.position.y-game.backgroundT.position.y)
+//            game.cam.run(SKAction.moveTo(y: game.backgroundT.position.y + (game.backgroundB.position.y-game.backgroundT.position.y), duration: 0.25))
+            game.cam.position.y = game.backgroundT.position.y + (game.backgroundB.position.y-game.backgroundT.position.y)
         }
     }
      //updates the images on the block menu
@@ -258,22 +259,26 @@ class GameViewController: UIViewController {
     //buttons to move camera
     @IBAction func leftAction(_ sender: UIButton) {
         AppData.moveLeft = true
+        moveButtons = true
     }
     
 
     @IBAction func leftActionEnd(_ sender: UIButton) {
         AppData.moveLeft = false
+        moveButtons = false
     }
     
     
     
     @IBAction func rightAction(_ sender: UIButton) {
         AppData.moveRight = true
+        moveButtons = true
     }
     
     
     @IBAction func rightActionEnd(_ sender: UIButton) {
         AppData.moveRight = false
+        moveButtons = false
     }
     
     

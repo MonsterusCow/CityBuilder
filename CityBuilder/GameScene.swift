@@ -191,16 +191,22 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         if (bodyA.name != "ground" && bodyB.name != "ground") && (bodyA.name != "Cground" && bodyB.name != "Cground") {
 //            print("bodyA: \(bodyA)")
 //            print("bodyB: \(bodyB)")
-            if bodyA.name == "wood" || bodyB.name == "wood"{
-                if bodyA.name == "I-Beam" || bodyB.name == "I-Beam"{
+            var continuee = true
+            if (bodyA.name == "wood" && bodyB.name == "I-Beam") || (bodyA.name == "I-Beam" && bodyB.name == "wood"){
                     var doit = false
                     if bodyA.name == "I-Beam"{
                         if bodyA.position.y > bodyB.position.y {
                             doit = true
+                            continuee = false
+                        } else {
+                            continuee = true
                         }
                     } else {
                         if bodyB.position.y > bodyA.position.y {
                             doit = true
+                            continuee = false
+                        } else {
+                            continuee = true
                         }
                     }
                     if doit{
@@ -212,8 +218,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                             giveScoreIndicatior(at: bodyB.position, score: "CRUSH", game: self, color: .red)
                         }
                     }
-                }
-            } else {
+            }
+            if continuee{
                 //if blocks allign middles
                 if bodyA.position.x > (bodyB.position.x - (bodyB.frame.width/10)) && bodyA.position.x < (bodyB.position.x + (bodyB.frame.width/10)){
                     score += 10.0
@@ -275,16 +281,42 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
     }
     
+    func checkForEdgeScroll(_ touchLocation: CGPoint) {
+        let edgeBuffer: CGFloat = 300
+        var leftEdge = (cam.position.x - (self.size.width * cam.xScale)/2)
+        var rightEdge = (cam.position.x + (self.size.width * cam.xScale)/2)
+        leftEdge += edgeBuffer
+        rightEdge -= edgeBuffer
+
+        if touchLocation.x < leftEdge {
+            if !AppData.moveLeft {
+                AppData.moveLeft = true
+//                print("Moving Left")
+            }
+        } else {
+            AppData.moveLeft = false
+        }
+
+        if touchLocation.x > rightEdge {
+            if !AppData.moveRight {
+                AppData.moveRight = true
+//                print("Moving Right")
+            }
+        } else {
+            AppData.moveRight = false
+        }
+    }
+
     
     override func update(_ currentTime: TimeInterval) {
         //        print(crane.position.y)
         if !moving{
             if AppData.moveLeft{
                 if cam.position.x > ((self.size.width * cam.xScale)/2+25){
-//                    print("cam: \(cam.position.x)")
-//                    print("Visible Width: \(self.size.width * cam.xScale)")
-//                    print("Min X (Leftmost): \((self.size.width * cam.xScale)/2)")
                     cam.position.x -= 25
+                    if !AppData.view.moveButtons{
+                        crane.position.x -= 25
+                    }
                 } else {
                     cam.position.x = (self.size.width * cam.xScale)/2
                 }
@@ -292,10 +324,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             if AppData.moveRight{
                 if cam.position.x < ((backgroundT.position.x+backgroundT.frame.width/2) - ((self.size.width * cam.xScale)/2)-25){
                     cam.position.x += 25
+                    if !AppData.view.moveButtons{
+                        crane.position.x += 25
+                    }
                 } else {
                     cam.position.x = (backgroundT.position.x+backgroundT.frame.width/2) - ((self.size.width * cam.xScale)/2)
                 }
             }
+        }
+        if holding {
+            allBuildings.last!.sprite.position = CGPoint(x: crane.position.x, y: crane.position.y-100)
         }
         if moving{
             if cam.position.x <= ((self.size.width * cam.xScale)/2)+1 {
@@ -308,32 +346,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 AppData.view.checkHeight()
             }
         }
-        if crane.position.x < (cam.position.x-(self.size.width * cam.xScale)/2)+300{
-            if !AppData.moveLeft{
-                AppData.moveLeft = true
-            }
-//            if crane.position.x > (cam.position.x-(self.size.width * cam.xScale)/2)+330
-        } else {
-            if AppData.moveLeft{
-                AppData.moveLeft = false
-            }
-        }
-        if crane.position.x > (cam.position.x+(self.size.width * cam.xScale)/2)-300{
-            if !AppData.moveRight{
-                AppData.moveRight = true
-                crane.position.x += 25
-            }
-//            if crane.position.x < (cam.position.x+(self.size.width * cam.xScale)/2)-330
-        } else {
-            if AppData.moveRight{
-                AppData.moveRight = false
-            }
-        }
-        
-        
-    
-        
-        
-        
     }
+    
+    
 }

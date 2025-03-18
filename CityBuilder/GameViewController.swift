@@ -144,7 +144,8 @@ class GameViewController: UIViewController {
             } else if block.imageID == "wood" {
                 createBuilding(block: block, sizex: 200, sizey: 100, scene: game)
             } else if block.imageID == "billboard" {
-                createBuilding(block: block, sizex: 650, sizey: 400, scene: game)
+                //13 by 8
+                createBuilding(block: block, sizex: 390, sizey: 240, scene: game)
             }
             
             

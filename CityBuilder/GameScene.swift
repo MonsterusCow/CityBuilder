@@ -111,6 +111,9 @@ func moveCraneToBuilding(building: Building,game: GameScene) {
 func dropBuilding(game: GameScene) {
     allBuildings.last!.sprite.removeFromParent()
     game.addChild(allBuildings.last!.sprite)
+    if allBuildings.last!.block.name == "billboard"{
+        allBuildings.last!.sprite.physicsBody = SKPhysicsBody(texture: SKTexture(imageNamed: allBuildings.last!.block.imageID), size: allBuildings.last!.sprite.size)
+    }
     allBuildings.last!.sprite.physicsBody?.affectedByGravity = true
     if allBuildings.last!.block.imageID != "gold"{
         allBuildings.last!.sprite.physicsBody?.allowsRotation = true
@@ -156,6 +159,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var initialCraneY = CGFloat(0)
     var construction: SKSpriteNode!
     var moving = false
+    var panning = false
     
 
     
@@ -175,8 +179,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 //        cam.position.y -= 80
 //        cam.setScale(max(background.size.width / self.size.width, background.size.height / self.size.height))
         initialCraneY = crane.position.y
-
-//        createBuilding(position: CGPoint(x: crane.position.x, y: crane.position.y-100), block: Block(name: "road", imageID: "street"), sizex: 200, sizey: 200, scene: self)
+//        print(initialCraneY)
+//        print(initialCraneY + ((self.size.height * cam.yScale)/2))
+//        cam.run(SKAction.moveTo(y: crane.position.y+300, duration: 2))
     }
     
     func didBegin(_ contact: SKPhysicsContact) {
@@ -187,7 +192,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 //            print("bodyA: \(bodyA)")
 //            print("bodyB: \(bodyB)")
             if bodyA.name == "wood" || bodyB.name == "wood"{
-                print("yes")
                 if bodyA.name == "I-Beam" || bodyB.name == "I-Beam"{
                     var doit = false
                     if bodyA.name == "I-Beam"{
@@ -265,6 +269,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+       
     }
     
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -303,11 +308,28 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 AppData.view.checkHeight()
             }
         }
-        if crane.position.y > initialCraneY + ((self.size.height * cam.yScale)/2)-300 {
-            cam.position.y = crane.position.y-100
+        if crane.position.x < (cam.position.x-(self.size.width * cam.xScale)/2)+300{
+            if !AppData.moveLeft{
+                AppData.moveLeft = true
+            }
+//            if crane.position.x > (cam.position.x-(self.size.width * cam.xScale)/2)+330
         } else {
-            cam.position.y = backgroundT.position.y + (backgroundB.position.y-backgroundT.position.y)
+            if AppData.moveLeft{
+                AppData.moveLeft = false
+            }
         }
+        if crane.position.x > (cam.position.x+(self.size.width * cam.xScale)/2)-300{
+            if !AppData.moveRight{
+                AppData.moveRight = true
+                crane.position.x += 25
+            }
+//            if crane.position.x < (cam.position.x+(self.size.width * cam.xScale)/2)-330
+        } else {
+            if AppData.moveRight{
+                AppData.moveRight = false
+            }
+        }
+        
         
     
         

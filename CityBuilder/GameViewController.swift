@@ -22,7 +22,8 @@ class AppData{
 class GameViewController: UIViewController {
     
     var game: GameScene!
-    var blockArray: [Block] = [Block(name: "brick", imageID: "brick", rarity: 1.0),Block(name: "window", imageID: "window", rarity: 0.7),Block(name: "goop", imageID: "goop", rarity: 0.5), Block(name: "gold", imageID: "gold", rarity: 0.2), Block(name: "I-Beam", imageID: "I-Beam", rarity: 0.7), Block(name: "wood", imageID: "wood", rarity: 1.0), Block(name: "billboard", imageID: "billboard", rarity: 1.0)]
+    var blockArray: [Block] = [Block(name: "brick", imageID: "brick", rarity: 1.0),Block(name: "window", imageID: "window", rarity: 0.7),Block(name: "gold", imageID: "gold", rarity: 0.1), Block(name: "I-Beam", imageID: "I-Beam", rarity: 0.4), Block(name: "wood", imageID: "wood", rarity: 1.0), Block(name: "billboard", imageID: "billboard", rarity: 02)]
+//    Block(name: "goop", imageID: "goop", rarity: 0.5),
     var randomBlockArray: [Block] = []
     
     var score = 0.0
@@ -51,7 +52,7 @@ class GameViewController: UIViewController {
         AppData.view = self
         
         buttonArray = [self.button0,self.button1,self.button2,self.button3,self.button4]
-        
+                
         addBlocksToRandomArray()
         updateBlocks()
         
@@ -77,6 +78,7 @@ class GameViewController: UIViewController {
     
     //moves the crane left and right
     @IBAction func tapAction(_ sender: UITapGestureRecognizer) {
+        print("tap")
         let touchLocation = sender.location(in: view)
             if let scene = game.view?.scene {
                 if game.holding && !game.construction.contains(CGPoint(x:game.crane.position.x-(allBuildings.last!.width/2),y:game.construction.position.y)){
@@ -140,11 +142,11 @@ class GameViewController: UIViewController {
             } else if block.imageID == "gold" {
                 createBuilding(block: block, sizex: 200, sizey: 100, scene: game)
             } else if block.imageID == "I-Beam" {
-                createBuilding(block: block, sizex: 350, sizey: 100, scene: game)
+                createBuilding(block: block, sizex: 400, sizey: 100, scene: game)
             } else if block.imageID == "wood" {
-                createBuilding(block: block, sizex: 200, sizey: 100, scene: game)
+                createBuilding(block: block, sizex: 200, sizey: 45, scene: game)
             } else if block.imageID == "billboard" {
-                createBuilding(block: block, sizex: 650, sizey: 400, scene: game)
+                createBuilding(block: block, sizex: 475, sizey: 200, scene: game)
             }
             
             
@@ -211,25 +213,23 @@ class GameViewController: UIViewController {
                    }
                } else {
                    game.crane.position.y = beginY
-//                   moveAction = SKAction.moveTo(y: beginY, duration: 0.5)
-//                   moveAction.timingMode = .easeInEaseOut
-
                }
-//               game.crane.run(SKAction.sequence([
-//                   SKAction.run {
-//                       self.game.crane.removeAllActions()  // Ensures this move is prioritized
-//                   },
-//                   moveAction
-//               ]))
            }
 
-           if game.holding, let lastBuilding = allBuildings.last {
-               lastBuilding.sprite.position.y = game.crane.position.y - 100
-           }
-
-//           game.string.position.y = game.crane.position.y + 280
-//           game.drop.position.y = game.crane.position.y + 85
-
+        if game.holding, let lastBuilding = allBuildings.last {
+            lastBuilding.sprite.position.y = game.crane.position.y - 100
+        }
+        
+        if game.crane.position.y > (game.initialCraneY + ((game.size.height * game.cam.yScale)/2) - 400)  {
+            print("did")
+//            let a = SKAction.rotate(byAngle: 3, duration: 1)
+//            game.cam.run(a)
+            game.cam.run(SKAction.moveTo(y: game.crane.position.y-100, duration: 0.25))
+//            game.cam.position.y = game.crane.position.y-100
+        } else {
+            game.cam.run(SKAction.moveTo(y: game.backgroundT.position.y + (game.backgroundB.position.y-game.backgroundT.position.y), duration: 0.25))
+//            game.cam.position.y = game.backgroundT.position.y + (game.backgroundB.position.y-game.backgroundT.position.y)
+        }
     }
      //updates the images on the block menu
         func updateBlocks(){

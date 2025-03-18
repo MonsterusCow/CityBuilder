@@ -22,7 +22,7 @@ class AppData{
 class GameViewController: UIViewController {
     
     var game: GameScene!
-    var blockArray: [Block] = [Block(name: "brick", imageID: "brick", rarity: 1.0),Block(name: "window", imageID: "window", rarity: 0.7),Block(name: "gold", imageID: "gold", rarity: 0.1), Block(name: "I-Beam", imageID: "I-Beam", rarity: 0.4), Block(name: "wood", imageID: "wood", rarity: 1.0), Block(name: "billboard", imageID: "billboard", rarity: 02)]
+    var blockArray: [Block] = [Block(name: "brick", imageID: "brick", rarity: 1.0),Block(name: "window", imageID: "window", rarity: 0.7),Block(name: "gold", imageID: "gold", rarity: 0.1), Block(name: "I-Beam", imageID: "I-Beam", rarity: 0.4), Block(name: "wood", imageID: "wood", rarity: 1.0), Block(name: "billboard", imageID: "billboard", rarity: 0.2)]
 //    Block(name: "goop", imageID: "goop", rarity: 0.5),
     var randomBlockArray: [Block] = []
     

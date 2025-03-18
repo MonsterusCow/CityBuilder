@@ -16,8 +16,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="874" height="402"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <stackView opaque="NO" contentMode="scaleToFill" distribution="equalCentering" spacing="32" translatesAutoresizingMaskIntoConstraints="NO" id="ZKa-tD-hhY">
-                                <rect key="frame" x="108" y="316" width="694" height="55"/>
+                            <stackView opaque="NO" contentMode="scaleToFill" distribution="equalCentering" spacing="21" translatesAutoresizingMaskIntoConstraints="NO" id="ZKa-tD-hhY">
+                                <rect key="frame" x="50" y="301" width="715.66666666666663" height="55"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bwL-z8-kXy">
                                         <rect key="frame" x="0.0" y="0.0" width="85" height="55"/>
@@ -30,7 +30,7 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XMM-hs-eQi">
-                                        <rect key="frame" x="154" y="0.0" width="81.666666666666686" height="55"/>
+                                        <rect key="frame" x="159.33333333333334" y="0.0" width="81.666666666666657" height="55"/>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="plain" title="Button1">
                                             <color key="baseForegroundColor" systemColor="systemRedColor"/>
@@ -40,7 +40,7 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MYS-fn-UC3">
-                                        <rect key="frame" x="292" y="0.0" width="110" height="55"/>
+                                        <rect key="frame" x="302.66666666666669" y="0.0" width="110" height="55"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="55" id="D43-u1-Unh"/>
                                             <constraint firstAttribute="width" constant="110" id="bsN-dr-liT"/>
@@ -54,7 +54,7 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Qbe-fF-qfz">
-                                        <rect key="frame" x="456.66666666666663" y="0.0" width="85" height="55"/>
+                                        <rect key="frame" x="473" y="0.0" width="85" height="55"/>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="plain" title="Button3">
                                             <color key="baseForegroundColor" systemColor="systemRedColor"/>
@@ -64,7 +64,7 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xlB-dL-BXG">
-                                        <rect key="frame" x="608.66666666666663" y="0.0" width="85.333333333333371" height="55"/>
+                                        <rect key="frame" x="630.33333333333337" y="0.0" width="85.333333333333371" height="55"/>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="plain" title="Button4">
                                             <color key="baseForegroundColor" systemColor="systemRedColor"/>
@@ -109,17 +109,8 @@
                                     <action selector="rightActionEnd:" destination="BV1-FR-VrT" eventType="touchUpOutside" id="PiL-f1-zC8"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sjj-2U-Lsb">
-                                <rect key="frame" x="22" y="23" width="114" height="42"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="tinted" title="How to Play"/>
-                                <connections>
-                                    <action selector="HpwToPlayAction:" destination="BV1-FR-VrT" eventType="touchUpInside" id="hEa-1f-ULw"/>
-                                </connections>
-                            </button>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Rlv-kE-TaX">
-                                <rect key="frame" x="80" y="0.0" width="712" height="299"/>
+                                <rect key="frame" x="80" y="0.0" width="712" height="283"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Score: 0" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="f9l-Am-XtP">
                                         <rect key="frame" x="512" y="20" width="200" height="27"/>
@@ -137,22 +128,32 @@
                                     <outletCollection property="gestureRecognizers" destination="6bL-LP-2wo" appends="YES" id="N21-FK-UsG"/>
                                 </connections>
                             </view>
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sjj-2U-Lsb">
+                                <rect key="frame" x="789" y="311" width="49" height="34"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="filled" title="?"/>
+                                <connections>
+                                    <action selector="HpwToPlayAction:" destination="BV1-FR-VrT" eventType="touchUpInside" id="hEa-1f-ULw"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="4qk-I5-YsI"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <gestureRecognizers/>
                         <constraints>
+                            <constraint firstItem="Rlv-kE-TaX" firstAttribute="trailing" secondItem="3se-qz-xqx" secondAttribute="trailingMargin" id="0P6-MT-OlH"/>
+                            <constraint firstItem="ZKa-tD-hhY" firstAttribute="centerY" secondItem="sjj-2U-Lsb" secondAttribute="centerY" id="5ga-lF-wxv"/>
                             <constraint firstAttribute="bottom" secondItem="6BK-x8-o6T" secondAttribute="bottom" constant="9" id="76u-rz-ADL"/>
-                            <constraint firstItem="Rlv-kE-TaX" firstAttribute="leading" secondItem="4qk-I5-YsI" secondAttribute="leading" constant="18" id="8RN-vT-DiR"/>
                             <constraint firstAttribute="trailing" secondItem="MZu-eh-RSX" secondAttribute="trailing" constant="22" id="DYi-43-uik"/>
-                            <constraint firstItem="ZKa-tD-hhY" firstAttribute="top" secondItem="Rlv-kE-TaX" secondAttribute="bottom" constant="17" id="IM0-kh-LJT"/>
-                            <constraint firstItem="4qk-I5-YsI" firstAttribute="trailing" secondItem="Rlv-kE-TaX" secondAttribute="trailing" constant="20" id="jZ2-e6-55M"/>
-                            <constraint firstItem="4qk-I5-YsI" firstAttribute="trailing" secondItem="ZKa-tD-hhY" secondAttribute="trailing" constant="10" id="jZ6-kG-EqJ"/>
-                            <constraint firstItem="4qk-I5-YsI" firstAttribute="bottom" secondItem="ZKa-tD-hhY" secondAttribute="bottom" constant="10" id="kN8-C9-I2A"/>
-                            <constraint firstItem="ZKa-tD-hhY" firstAttribute="leading" secondItem="4qk-I5-YsI" secondAttribute="leading" constant="46" id="vkg-x6-XxD"/>
+                            <constraint firstItem="ZKa-tD-hhY" firstAttribute="leading" secondItem="3se-qz-xqx" secondAttribute="leadingMargin" constant="-32" id="Teq-9F-2Bf"/>
+                            <constraint firstItem="Rlv-kE-TaX" firstAttribute="top" secondItem="6BK-x8-o6T" secondAttribute="top" id="TmR-Kq-9Sx"/>
+                            <constraint firstAttribute="bottom" secondItem="Rlv-kE-TaX" secondAttribute="bottom" constant="119" id="TxC-qg-Aij"/>
+                            <constraint firstItem="sjj-2U-Lsb" firstAttribute="leading" secondItem="ZKa-tD-hhY" secondAttribute="trailing" constant="26" id="Vty-GO-ZbF"/>
+                            <constraint firstAttribute="trailing" secondItem="sjj-2U-Lsb" secondAttribute="trailing" constant="50" id="Xp3-Im-GCf"/>
+                            <constraint firstItem="Rlv-kE-TaX" firstAttribute="leading" secondItem="4qk-I5-YsI" secondAttribute="leading" constant="18" id="mzu-js-k4t"/>
+                            <constraint firstItem="ZKa-tD-hhY" firstAttribute="top" secondItem="Rlv-kE-TaX" secondAttribute="bottom" constant="18" id="utC-Gw-U0h"/>
                             <constraint firstAttribute="bottom" secondItem="MZu-eh-RSX" secondAttribute="bottom" constant="9" id="xPd-29-eFc"/>
                             <constraint firstItem="6BK-x8-o6T" firstAttribute="leading" secondItem="3se-qz-xqx" secondAttribute="leading" constant="43" id="xPf-Tc-q5X"/>
-                            <constraint firstItem="Rlv-kE-TaX" firstAttribute="top" secondItem="3se-qz-xqx" secondAttribute="top" id="xQa-uw-AkB"/>
                         </constraints>
                         <connections>
                             <outletCollection property="gestureRecognizers" destination="6bL-LP-2wo" appends="YES" id="fxE-US-TXO"/>
@@ -181,7 +182,7 @@
                     </connections>
                 </tapGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="888.0281690140846" y="3.8167938931297707"/>
+            <point key="canvasLocation" x="887.64302059496561" y="2.9850746268656714"/>
         </scene>
         <!--How To Play View-->
         <scene sceneID="3wJ-Kc-H9S">
@@ -244,10 +245,10 @@
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
         <systemColor name="systemCyanColor">
-            <color red="0.19607843137254902" green="0.67843137254901964" blue="0.90196078431372551" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.1960784314" green="0.67843137249999996" blue="0.90196078430000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemRedColor">
-            <color red="1" green="0.23137254901960785" blue="0.18823529411764706" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="1" green="0.23137254900000001" blue="0.18823529410000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

@@ -29,6 +29,7 @@ class GameViewController: UIViewController {
     var score = 0.0
     
     @IBOutlet weak var scoreOutlet: UILabel!
+    @IBOutlet weak var quotaOutlet: UILabel!
     
     @IBOutlet weak var button0: UIButton!
     
@@ -42,6 +43,7 @@ class GameViewController: UIViewController {
     
     var moveButtons = false
 
+    var quota = 50.0
     
     var lastRandomNumber = -1
     
@@ -170,7 +172,7 @@ class GameViewController: UIViewController {
                
                var holdBuilding = allBuildings.last!.width/2
                if !game.holding {
-                   holdBuilding = 0
+                   holdBuilding = game.crane.size.width/2
                }
                if game.crane.position.x >= building.sprite.position.x - (building.sprite.frame.width / 2) - holdBuilding &&
                     game.crane.position.x <= building.sprite.position.x + (building.sprite.frame.width / 2) + holdBuilding {
@@ -224,12 +226,23 @@ class GameViewController: UIViewController {
         
         if game.crane.position.y > (game.initialCraneY + ((game.size.height * game.cam.yScale)/2) - 400)  {
             print("did")
-            //cam wont do skaction
-//            game.cam.run(SKAction.moveTo(y: game.crane.position.y-100, duration: 0.25))
-            game.cam.position.y = game.crane.position.y-100
+            game.leader = SKSpriteNode(color: UIColor(red: 100, green: 100, blue: 100, alpha: 0), size: CGSize(width: 10.0, height: 10.0))
+            game.leader.position = game.cam.position
+            game.addChild(game.leader)
+            game.follow = true
+            game.leader.run(SKAction.moveTo(y: game.crane.position.y-100, duration: 0.1))
+//            game.cam.position.y = game.crane.position.y-100
         } else {
-//            game.cam.run(SKAction.moveTo(y: game.backgroundT.position.y + (game.backgroundB.position.y-game.backgroundT.position.y), duration: 0.25))
-            game.cam.position.y = game.backgroundT.position.y + (game.backgroundB.position.y-game.backgroundT.position.y)
+            
+            if game.leader.position.y != game.backgroundT.position.y + (game.backgroundB.position.y-game.backgroundT.position.y){
+                game.leader = SKSpriteNode(color: UIColor(red: 100, green: 100, blue: 100, alpha: 0), size: CGSize(width: 10.0, height: 10.0))
+                game.leader.position = game.cam.position
+                game.addChild(game.leader)
+                game.follow = true
+                game.leader.run(SKAction.moveTo(y: game.backgroundT.position.y + (game.backgroundB.position.y-game.backgroundT.position.y), duration: 0.1))
+                //            game.cam.position.y = game.backgroundT.position.y + (game.backgroundB.position.y-game.backgroundT.position.y)
+            }
+            
         }
     }
      //updates the images on the block menu
@@ -317,6 +330,10 @@ class GameViewController: UIViewController {
     
     @IBAction func HpwToPlayAction(_ sender: UIButton) {
         performSegue(withIdentifier: "toTutorial", sender: self)
+    }
+    
+    func Lose(){
+        performSegue(withIdentifier: "lose", sender: self)
     }
     
         

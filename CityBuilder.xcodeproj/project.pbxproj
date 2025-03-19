@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		28B9477F2D8AEBE7001CB6EF /* LoseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28B9477E2D8AEBE7001CB6EF /* LoseViewController.swift */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		288C13772D6F522A005AEF0D /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -27,6 +31,7 @@
 		288C135D2D6F521A005AEF0D /* CityBuilder.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CityBuilder.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		288C13762D6F522A005AEF0D /* CityBuilderTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CityBuilderTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		288C13802D6F522A005AEF0D /* CityBuilderUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CityBuilderUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		28B9477E2D8AEBE7001CB6EF /* LoseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoseViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -75,6 +80,7 @@
 		288C13542D6F521A005AEF0D = {
 			isa = PBXGroup;
 			children = (
+				28B9477E2D8AEBE7001CB6EF /* LoseViewController.swift */,
 				288C135F2D6F521A005AEF0D /* CityBuilder */,
 				288C13792D6F522A005AEF0D /* CityBuilderTests */,
 				288C13832D6F522A005AEF0D /* CityBuilderUITests */,
@@ -175,6 +181,7 @@
 				TargetAttributes = {
 					288C135C2D6F521A005AEF0D = {
 						CreatedOnToolsVersion = 16.2;
+						LastSwiftMigration = 1620;
 					};
 					288C13752D6F522A005AEF0D = {
 						CreatedOnToolsVersion = 16.2;
@@ -236,6 +243,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				28B9477F2D8AEBE7001CB6EF /* LoseViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -393,6 +401,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -410,6 +419,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = CLC.CityBuilder;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -420,6 +430,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;

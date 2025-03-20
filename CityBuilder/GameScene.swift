@@ -20,9 +20,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var backgroundB: SKSpriteNode!
     var crane : SKSpriteNode!
     var string: SKSpriteNode!
+    var casee: SKSpriteNode!
+    var power: SKSpriteNode!
     var buildings: [SKSpriteNode] = []
     var holding = false
     var initialCraneY = CGFloat(0)
+    var initialCamY = CGFloat(0)
     var construction: SKSpriteNode!
     var moving = false
     var panning = false
@@ -31,6 +34,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var leader = SKSpriteNode(color: UIColor(red: 100, green: 100, blue: 100, alpha: 0), size: CGSize(width: 10.0, height: 10.0))
     var follow = false
     
+    
+    
 
     
     override func didMove(to view: SKView) {
@@ -38,12 +43,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         crane = (self.childNode(withName: "crane") as! SKSpriteNode)
         drop = crane.childNode(withName: "drop") as? SKSpriteNode
         string = crane.childNode(withName: "string") as? SKSpriteNode
+        casee = crane.childNode(withName: "case") as? SKSpriteNode
+        power = crane.childNode(withName: "power") as? SKSpriteNode
+//        power.anchorPoint = CGPoint(x: 0, y: 0.5)
+//        power.position.x = power.position.x - power.frame.width/2
         backgroundT = (self.childNode(withName: "backgroundT") as! SKSpriteNode)
         backgroundB = (self.childNode(withName: "backgroundB") as! SKSpriteNode)
         construction = (self.childNode(withName: "construction") as! SKSpriteNode)
         self.camera = cam
-        cam.position.y = backgroundT.position.y + (backgroundB.position.y-backgroundT.position.y)
+        initialCamY = backgroundT.position.y + (backgroundB.position.y-backgroundT.position.y)
         cam.position.x = crane.position.x
+        cam.position.y = initialCamY
         cam.setScale(1.3)
 //        print(cam.frame.width)
 //        cam.position.y -= 80
@@ -54,7 +64,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 //        cam.run(SKAction.moveTo(y: crane.position.y+300, duration: 2))
         
 //        AppData.view.Lose()
-        
+//        power.run(SKAction.resize(toWidth: 0, duration: 3))
     }
     
     func didBegin(_ contact: SKPhysicsContact) {
@@ -221,6 +231,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 allBuildings.last!.sprite.position = CGPoint(x: crane.position.x, y: crane.position.y-100)
                 AppData.view.checkHeight()
             }
+            if cam.position.y > initialCamY{
+                cam.position.y = crane.position.y-200
+            } else {
+                cam.position.y = initialCamY
+            }
         }
         if contactHappen{
             _ = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: false) { timer in
@@ -229,6 +244,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
         if follow{
             cam.position.y = leader.position.y
+            if cam.position.y == crane.position.y-200{follow=false}
         }
     }
     

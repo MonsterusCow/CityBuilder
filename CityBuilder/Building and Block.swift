@@ -25,7 +25,7 @@ class Block {
 }
 
 // Building class that directly manages its sprite
-class Building {
+class Building: Equatable {
     var block: Block
     var height: Double
     var width: Double
@@ -56,6 +56,10 @@ class Building {
 
         scene.addChild(self.sprite)
     }
+    
+    static func == (lhs: Building, rhs: Building) -> Bool {
+        return lhs.block.name == rhs.block.name && lhs.height == rhs.height
+        }
 }
 
 // Global lists to track buildings
@@ -66,6 +70,7 @@ func createBuilding(block: Block, sizex: Int, sizey: Int, scene: GameScene) {
     let size = CGSize(width: sizex, height: sizey)
     let building = Building(block: block, position: CGPoint(x: scene.construction.position.x, y: (scene.construction.position.y-300)), size: size, scene: scene)
     allBuildings.append(building)
+    print("appended")
     
     moveCraneToBuilding(building: building, game: scene)
 }
@@ -127,6 +132,7 @@ func dropBuilding(game: GameScene) {
     game.crane.texture = SKTexture(image: UIImage(named: "claw")!)
     
     let timer = Timer.scheduledTimer(withTimeInterval: 2.0, repeats: false) { timer in
+        
         if AppData.view.score < AppData.view.quota{
             
         }

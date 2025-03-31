@@ -17,7 +17,7 @@ class HowToPlayView: UIViewController{
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        tutorialText1.text = ""
+//        tutorialText1.text = ""
     }
     
     

@@ -240,13 +240,14 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" lineBreakMode="tailTruncation" numberOfLines="10" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LAp-QE-Evn">
-                                <rect key="frame" x="79" y="96" width="465" height="276"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LAp-QE-Evn">
+                                <rect key="frame" x="79" y="69" width="465" height="303"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <string key="text">-Click blocks to pick them up  
--Drag blocks and aling them with other blocks for points 
+-Drag blocks and align them with other blocks for points 
+-press the edges or move the crane close to the edge of the screen to move the camera 
+(not implemented \/)
 -make sure you drop blocks quickly because you can't hold them forever 
--press the edges of the screen to move the camera 
 -make sure to make the point quotas and dont knock over your buildings
 -drop blocks in the construction area to drop them</string>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleTitle3"/>
@@ -264,7 +265,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="2Pr-pD-1Mb" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="186" y="778"/>
+            <point key="canvasLocation" x="185.35469107551486" y="777.61194029850742"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="oz7-Cv-B6C">

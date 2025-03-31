@@ -139,18 +139,25 @@ class GameViewController: UIViewController {
             
             if block.imageID == "brick"{
                 createBuilding(block: block, sizex: 200, sizey: 100, scene: game)
+                print("made building")
             } else if block.imageID == "goop"{
                 createBuilding(block: block, sizex: 150, sizey: 45, scene: game)
+                print("made building")
             } else if block.imageID == "window" {
                 createBuilding(block: block, sizex: 100, sizey: 100, scene: game)
+                print("made building")
             } else if block.imageID == "gold" {
                 createBuilding(block: block, sizex: 200, sizey: 100, scene: game)
+                print("made building")
             } else if block.imageID == "I-Beam" {
                 createBuilding(block: block, sizex: 400, sizey: 100, scene: game)
+                print("made building")
             } else if block.imageID == "wood" {
                 createBuilding(block: block, sizex: 200, sizey: 45, scene: game)
+                print("made building")
             } else if block.imageID == "billboard" {
                 createBuilding(block: block, sizex: 475, sizey: 200, scene: game)
+                print("made building")
             }
             
             
@@ -230,7 +237,7 @@ class GameViewController: UIViewController {
             game.leader.position = game.cam.position
             game.addChild(game.leader)
             game.follow = true
-            game.leader.run(SKAction.moveTo(y: game.crane.position.y-100, duration: 0.1))
+            game.leader.run(SKAction.moveTo(y: game.crane.position.y-200, duration: 0.1))
 //            game.cam.position.y = game.crane.position.y-100
         } else {
             

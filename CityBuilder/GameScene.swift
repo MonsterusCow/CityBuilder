@@ -68,6 +68,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func didBegin(_ contact: SKPhysicsContact) {
+        for i in 0..<allBuildings.count{
+            print(allBuildings[i].block.name)
+        }
         let bodyA = contact.bodyA.node!
         let bodyB = contact.bodyB.node!
         if !contactHappen{
@@ -96,9 +99,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                     }
                     if doit{
                         if bodyA.name == "wood"{
+                            if let index = allBuildings.firstIndex(where: { $0.sprite == contact.bodyA }) {
+                                allBuildings.remove(at: index)
+                                physicalBuildings.remove(at: index)
+                                
+                            }
                             bodyA.removeFromParent()
                             giveScoreIndicatior(at: bodyA.position, score: "CRUSH", game: self, color: .red)
                         } else {
+                            if let index = allBuildings.firstIndex(where: { $0.sprite == contact.bodyB }) {
+                                allBuildings.remove(at: index)
+                                physicalBuildings.remove(at: index)
+                            }
                             bodyB.removeFromParent()
                             giveScoreIndicatior(at: bodyB.position, score: "CRUSH", game: self, color: .red)
                         }

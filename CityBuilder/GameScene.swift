@@ -45,8 +45,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         string = crane.childNode(withName: "string") as? SKSpriteNode
         casee = crane.childNode(withName: "case") as? SKSpriteNode
         power = crane.childNode(withName: "power") as? SKSpriteNode
-//        power.anchorPoint = CGPoint(x: 0, y: 0.5)
-//        power.position.x = power.position.x - power.frame.width/2
+        power.anchorPoint = CGPoint(x: 0, y: 0.5)
+        power.position.x = power.position.x - power.frame.width/2
+        power.xScale = power.xScale/4
         backgroundT = (self.childNode(withName: "backgroundT") as! SKSpriteNode)
         backgroundB = (self.childNode(withName: "backgroundB") as! SKSpriteNode)
         construction = (self.childNode(withName: "construction") as! SKSpriteNode)
@@ -69,7 +70,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     func didBegin(_ contact: SKPhysicsContact) {
         for i in 0..<allBuildings.count{
-            print(allBuildings[i].block.name)
+//            print(allBuildings[i].block.name)
         }
         let bodyA = contact.bodyA.node!
         let bodyB = contact.bodyB.node!
